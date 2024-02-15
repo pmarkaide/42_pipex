@@ -1,3 +1,7 @@
+*.pdf
+*test*
+*working*
+
 # Prerequisites
 *.d
 
