@@ -1,6 +1,7 @@
 *.pdf
 *test*
 *working*
+lib/
 
 # Prerequisites
 *.d
