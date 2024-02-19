@@ -2,6 +2,9 @@
 *test*
 *working*
 lib/
+infile
+outfile
+pipex
 
 # Prerequisites
 *.d
