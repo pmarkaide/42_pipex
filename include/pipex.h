@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/18 15:05:33 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:27:01 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,3 +36,5 @@ void			exit_1(const char *error_msg);
 
 void	init_struct(t_data	*data, char **argv, char **envp);
 char	**parse_cmd_args(char *arg);
+char	**parse_paths(char **envp);
+void	free_data(t_data *data);
