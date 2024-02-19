@@ -6,59 +6,51 @@
 #    By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/18 13:04:46 by pmarkaid          #+#    #+#              #
-#    Updated: 2024/02/18 15:55:21 by pmarkaid         ###   ########.fr        #
+#    Updated: 2024/02/19 11:10:10 by pmarkaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
-SRCS = \
-	main.c \
+SRCS_FILES = \
 	error.c \
+	main.c \
 	utils.c
 
-SRCS_DIR = src
+SRC_DIR = src/
+SRCS = $(addprefix $(SRC_DIR), $(SRCS_FILES))
 
-LIB_DIR = lib
-
-LIBFT_DIR = $(LIB_DIR)/libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_DIR = lib/libft/
+LIBFT = $(LIBFT_DIR)libft.a
+LIBFT_INCLUDE = -I $(LIBFT_DIR)
 
 OBJS = $(SRCS:.c=.o)
 
-LIBFT_INCLUDE = -I $(LIBFT_DIR)
-LIBFT_MARKER = .libft
-
-CC = gcc
-CFLAGS = -Wall -Wextra
+CC = cc
+CFLAGS = -Wall -Werror -Wextra
 
 all: makelibft $(NAME)
 
-# Make libft
 makelibft:
 	make -C $(LIBFT_DIR)
 
-# Create marker if libft.a in libft directory changed (makelibft had run)
-$(LIBFT_MARKER): $(LIBFT)
-	touch $(LIBFT_MARKER)
-
-# Copy libft only if marker changed (makelibft had run and changed the marker)
-$(LIBFT): $(LIBFT_MARKER)
-	cp $(LIBFT) .
-
 %.o: %.c
-	$(CC) $(CFLAGS) $(LIBFT_INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(LIBFT_INCLUDE) $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(LIBFT_INCLUDE) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_INCLUDE) $(INCLUDE) $(LIBFT) -o $(NAME)
 
 clean:
+	make -C $(LIBFT_DIR) clean
 	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)
-	rm -rf $(LIBFT)
+	rm -f $(LIBFT)
+
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all makelibft clean fclean re 
+
+
