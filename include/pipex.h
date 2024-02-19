@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/19 12:27:01 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:52:30 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@
 typedef struct s_data
 {
 	int pipe_fd[2];
+	int in_fd;
+	int out_fd;
 	char **cmd1;
 	char **cmd2;
+	char **cmd;
 	char **paths;
 }			t_data;
 
@@ -37,4 +40,5 @@ void			exit_1(const char *error_msg);
 void	init_struct(t_data	*data, char **argv, char **envp);
 char	**parse_cmd_args(char *arg);
 char	**parse_paths(char **envp);
+void	pipex(t_data *data, char **argv, char **envp);
 void	free_data(t_data *data);

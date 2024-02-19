@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:19:19 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/19 12:33:47 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:27 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main(int argc, char **argv, char **envp)
 	if(argc != 5)
 		exit_1("5 arguments needed\nUsage: ./pipex infile cmd1 cmd2 outfile");
 	init_struct(&data, argv, envp);
-	//pipex(data);
+	pipex(&data, argv, envp);
 	free_data(&data);
 	return 0;
 }
