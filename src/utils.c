@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/19 12:39:27 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/20 14:23:34 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@
 // 	char **env;
 // }				t_data;
 
-void	free_array(char **array)
+void free_array(char **array)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (array == NULL || *array == NULL)
-		return ;
+		return;
 	while (array[i] != NULL)
 	{
 		free(array[i]);
@@ -36,22 +36,22 @@ void	free_array(char **array)
 	free(array);
 }
 
-void	free_data(t_data *data)
+void free_data(t_data *data)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (data == NULL)
-		return ;
+		return;
 	free_array(data->cmd1);
 	free_array(data->cmd2);
 	free_array(data->paths);
 }
 
-char	**parse_cmd_args(char *arg)
+char **parse_cmd_args(char *arg)
 {
-	int		i;
-	char	**cmd;
+	int i;
+	char **cmd;
 
 	i = 0;
 	while (arg[i] != '\0')
@@ -64,10 +64,35 @@ char	**parse_cmd_args(char *arg)
 	return (cmd);
 }
 
-char	**parse_paths(char **envp)
+void get_executable_path(t_data *data)
 {
-	int		i;
-	char	**paths;
+	int i;
+	char *exec_path;
+
+	i = 0;
+	while (data->paths[i])
+	{
+		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
+		//access returns -1 and errno on error; 0 on sucess
+		if (!access(exec_path, F_OK | X_OK))
+			data->exec_path = exec_path;
+	}
+	free_data_and_exit(data, "No executable found");
+}
+
+char open_outfile(char *file)
+{
+	int fd;
+	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		perror("Error opening file");
+	return(fd);
+}
+
+char **parse_paths(char **envp)
+{
+	int i;
+	char **paths;
 
 	i = 0;
 	while (envp[i] != '\0')
@@ -82,7 +107,7 @@ char	**parse_paths(char **envp)
 	return (NULL);
 }
 
-void	init_struct(t_data *data, char **argv, char **envp)
+void init_struct(t_data *data, char **argv, char **envp)
 {
 	if (pipe(data->pipe_fd) == -1)
 		error_1("pipe failed");
@@ -90,4 +115,5 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->cmd1 = parse_cmd_args(argv[2]);
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
+	data->out_fd = open_outfile(argv[4]);
 }
