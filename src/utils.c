@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/20 15:47:16 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:24:40 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,6 @@ void get_executable_path(t_data *data)
 	free_data_and_exit(data, "No executable found");
 }
 
-char open_outfile(char *file)
-{
-	int fd;
-	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	return(fd);
-}
-
-int open_infile(char *file) {
-    int fd;
-    fd = open(file, O_RDONLY);
-    return fd;
-}
-
 char **parse_paths(char **envp)
 {
 	int i;
@@ -115,26 +102,9 @@ char **parse_paths(char **envp)
 
 void init_struct(t_data *data, char **argv, char **envp)
 {
-	if (pipe(data->pipe_fd) == -1)
-		error_1("pipe failed");
+	data->infile = argv[1];
+	data->outfile = argv[4];
 	data->cmd1 = parse_cmd_args(argv[2]);
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
-	data->in_fd = open_infile(argv[1]);
-	data->out_fd = open_outfile(argv[4]);
-
-}
-
-void check_params(t_data *data)
-{
-	if(data->cmd1 == NULL)
-		free_data_and_exit(data, "Problem parsing arguments");
-	if(data->cmd1 == NULL)
-		free_data_and_exit(data, "Problem parsing arguments");
-	if(data->paths == NULL)
-		free_data_and_exit(data, "Problem with path parsing");
-	if(data->in_fd == -1)
-		free_data_and_exit(data, "Error opening infile");
-	if(data->out_fd == -1)
-		free_data_and_exit(data, "Error opening outfile");
 }
