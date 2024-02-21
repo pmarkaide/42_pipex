@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/20 16:24:40 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:50:10 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,14 @@ void get_executable_path(t_data *data)
 	while (data->paths[i])
 	{
 		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
-		
 		//access returns -1 and errno on error; 0 on sucess
 		if (!access(exec_path, F_OK | X_OK))
+		{
 			data->exec_path = exec_path;
+			return;
+		}
 		free(exec_path);
+		i++;
 	}
 	free_data_and_exit(data, "No executable found");
 }

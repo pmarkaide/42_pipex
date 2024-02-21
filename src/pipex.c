@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/20 16:44:34 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:51:12 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void execute_cmd(t_data *data, char **envp)
 {
-	
 	if(execve(data->exec_path, data->cmd, envp) == -1)
 	{
 		exit_1("Execve error");
@@ -27,7 +26,7 @@ void execute_child1(t_data *data, char **envp)
 	int in_fd;
 
 	close(data->pipe_fd[0]);
-	in_fd = open(data->infile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	in_fd = open(data->infile, O_RDONLY);
 	if(in_fd == -1)
 		free_data_and_exit(data, "infile open failed");
 	if(dup2(in_fd,STDIN_FILENO) == -1)
@@ -36,7 +35,7 @@ void execute_child1(t_data *data, char **envp)
 	if(dup2(data->pipe_fd[1],STDOUT_FILENO) == -1)
 		free_data_and_exit(data, "dup2 error");		
 	close(data->pipe_fd[1]);
-	data->cmd = data->cmd1;	
+	data->cmd = data->cmd1;
 	get_executable_path(data);
 	execute_cmd(data, envp);
 }
@@ -56,7 +55,7 @@ void execute_child2(t_data *data, char **envp)
 		free_data_and_exit(data, "dup2 error");
 	close(out_fd);
 	data->cmd = data->cmd2;
-	get_executable_path(data);
+	get_executable_path(data);	
 	execute_cmd(data, envp);
 }
 
@@ -80,7 +79,6 @@ void pipex(t_data *data, char **envp)
 		execute_child2(data, envp);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
-	printf("waiting for childs to finish\n");
 	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
 }
