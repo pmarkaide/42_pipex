@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/21 16:50:10 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/02/22 12:05:01 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void free_array(char **array)
 
 void free_data(t_data *data)
 {
-	size_t i;
-
-	i = 0;
 	if (data == NULL)
 		return;
 	free_array(data->cmd1);
@@ -91,7 +88,7 @@ char **parse_paths(char **envp)
 	char **paths;
 
 	i = 0;
-	while (envp[i] != '\0')
+	while (envp[i])
 	{
 		if (ft_strnstr(envp[i], "PATH=", 5))
 		{
@@ -111,3 +108,5 @@ void init_struct(t_data *data, char **argv, char **envp)
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
 }
+
+
