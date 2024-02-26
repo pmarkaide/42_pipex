@@ -20,13 +20,13 @@
 // 	char **env;
 // }				t_data;
 
-void free_array(char **array)
+void	free_array(char **array)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (array == NULL || *array == NULL)
-		return;
+		return ;
 	while (array[i] != NULL)
 	{
 		free(array[i]);
@@ -36,19 +36,19 @@ void free_array(char **array)
 	free(array);
 }
 
-void free_data(t_data *data)
+void	free_data(t_data *data)
 {
 	if (data == NULL)
-		return;
+		return ;
 	free_array(data->cmd1);
 	free_array(data->cmd2);
 	free_array(data->paths);
 }
 
-char **parse_cmd_args(char *arg)
+char	**parse_cmd_args(char *arg)
 {
-	int i;
-	char **cmd;
+	int		i;
+	char	**cmd;
 
 	i = 0;
 	while (arg[i] != '\0')
@@ -61,10 +61,10 @@ char **parse_cmd_args(char *arg)
 	return (cmd);
 }
 
-void get_executable_path(t_data *data)
+void	get_executable_path(t_data *data)
 {
-	int i;
-	char *exec_path;
+	int		i;
+	char	*exec_path;
 
 	i = 0;
 	while (data->paths[i])
@@ -74,7 +74,7 @@ void get_executable_path(t_data *data)
 		if (!access(exec_path, F_OK | X_OK))
 		{
 			data->exec_path = exec_path;
-			return;
+			return ;
 		}
 		free(exec_path);
 		i++;
@@ -82,10 +82,10 @@ void get_executable_path(t_data *data)
 	free_data_and_exit(data, "No executable found");
 }
 
-char **parse_paths(char **envp)
+char	**parse_paths(char **envp)
 {
-	int i;
-	char **paths;
+	int		i;
+	char	**paths;
 
 	i = 0;
 	while (envp[i])
@@ -100,7 +100,7 @@ char **parse_paths(char **envp)
 	return (NULL);
 }
 
-void init_struct(t_data *data, char **argv, char **envp)
+void	init_struct(t_data *data, char **argv, char **envp)
 {
 	data->infile = argv[1];
 	data->outfile = argv[4];
@@ -108,5 +108,3 @@ void init_struct(t_data *data, char **argv, char **envp)
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
 }
-
-

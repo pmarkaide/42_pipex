@@ -17,7 +17,8 @@
 #include <stdlib.h>             /* for malloc, free, exit */
 #include <string.h>             /* for strerror */
 #include <sys/wait.h>           /* for waitpid, wait, */
-#include <unistd.h>             /* for close, read, write, unlink, dup, dup2, execve, fork, pipe */
+#include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
+	execve, fork, pipe */
 
 typedef struct s_data
 {
