@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/21 16:51:12 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:38:00 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	execute_child1(t_data *data, char **envp)
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (in_fd == -1)
-		free_data_and_exit(data, "infile open failed");
+		free_data_and_exit(data, data->infile);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
 		free_data_and_exit(data, "dup2 error");
 	close(in_fd);
@@ -46,7 +46,7 @@ void	execute_child2(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out_fd == -1)
-		free_data_and_exit(data, "infile open failed");
+		free_data_and_exit(data, data->outfile);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
 		free_data_and_exit(data, "dup2 error");
 	close(data->pipe_fd[0]);
