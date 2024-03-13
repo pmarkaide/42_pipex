@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/02/20 16:44:57 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:13:54 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ void		free_data_and_exit(t_data *data, const char *error_msg);
 void		init_struct(t_data *data, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);
-void		pipex(t_data *data, char **envp);
-void		execute_cmd(t_data *data, char **envp);
+int			pipex(t_data *data, char **envp);
+int			execute_cmd(t_data *data, char **envp);
 void		get_executable_path(t_data *data);

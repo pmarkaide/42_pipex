@@ -6,24 +6,22 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/04 18:38:00 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:25:02 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	execute_cmd(t_data *data, char **envp)
+int	execute_cmd(t_data *data, char **envp)
 {
 	if (execve(data->exec_path, data->cmd, envp) == -1)
-	{
-		exit_1("Execve error");
-	}
+		return (EXIT_FAILURE);
+	return (0);
 }
 
 void	execute_child1(t_data *data, char **envp)
 {
 	int	in_fd;
-
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (in_fd == -1)
@@ -42,7 +40,6 @@ void	execute_child1(t_data *data, char **envp)
 void	execute_child2(t_data *data, char **envp)
 {
 	int	out_fd;
-
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out_fd == -1)
@@ -58,7 +55,7 @@ void	execute_child2(t_data *data, char **envp)
 	execute_cmd(data, envp);
 }
 
-void	pipex(t_data *data, char **envp)
+int	pipex(t_data *data, char **envp)
 {
 	pid_t	pid[2];
 	int		status1;
@@ -80,4 +77,5 @@ void	pipex(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
+	return status2;
 }
