@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/13 19:25:02 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/03/16 17:45:51 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,26 @@ int	execute_cmd(t_data *data, char **envp)
 	return (0);
 }
 
-void	execute_child1(t_data *data, char **envp)
+int	execute_child1(t_data *data, char **envp)
 {
 	int	in_fd;
+	int exit_code;
+
+	exit_code = 0;
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (in_fd == -1)
-		free_data_and_exit(data, data->infile);
+		free_data_and_exit(data, data->infile, 5);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error");
+		free_data_and_exit(data, "dup2 error", -1);
 	close(in_fd);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error");
+		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
 	get_executable_path(data);
-	execute_cmd(data, envp);
+	exit_code = execute_cmd(data, envp);
+	return(exit_code);
 }
 
 void	execute_child2(t_data *data, char **envp)
@@ -43,12 +47,12 @@ void	execute_child2(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out_fd == -1)
-		free_data_and_exit(data, data->outfile);
+		free_data_and_exit(data, data->outfile, 5);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error");
+		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[0]);
 	if (dup2(out_fd, STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error");
+		free_data_and_exit(data, "dup2 error", -1);
 	close(out_fd);
 	data->cmd = data->cmd2;
 	get_executable_path(data);
@@ -61,16 +65,24 @@ int	pipex(t_data *data, char **envp)
 	int		status1;
 	int		status2;
 
+	int exit_code;
+	exit_code = 0;
 	if (pipe(data->pipe_fd) == -1)
 		error_1("pipe failed");
 	pid[0] = fork();
 	if (pid[0] == -1)
-		free_data_and_exit(data, "fork failed");
+		free_data_and_exit(data, "fork failed",-1);
 	if (pid[0] == 0)
-		execute_child1(data, envp);
+	{
+		exit_code = execute_child1(data, envp);
+		printf("exit_code1: %d\n",exit_code);
+		fflush(NULL);
+		if(exit_code)
+			return(exit_code);
+	}
 	pid[1] = fork();
 	if (pid[1] == -1)
-		free_data_and_exit(data, "fork failed");
+		free_data_and_exit(data, "fork failed", -1);
 	if (pid[1] == 0)
 		execute_child2(data, envp);
 	close(data->pipe_fd[0]);

@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/13 19:13:54 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/03/16 17:11:59 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int			error_1(const char *error_message);
 char		*error_null(const char *error_message);
 void		exit_1(const char *error_msg);
 void		free_data(t_data *data);
-void		free_data_and_exit(t_data *data, const char *error_msg);
+void		free_data_and_exit(t_data *data, const char *error_msg, int exit_code);
 void		init_struct(t_data *data, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);
