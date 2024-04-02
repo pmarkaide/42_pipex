@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/16 17:45:51 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:12:52 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,7 @@ int	pipex(t_data *data, char **envp)
 	if (pid[0] == -1)
 		free_data_and_exit(data, "fork failed",-1);
 	if (pid[0] == 0)
-	{
-		exit_code = execute_child1(data, envp);
-		printf("exit_code1: %d\n",exit_code);
-		fflush(NULL);
-		if(exit_code)
-			return(exit_code);
-	}
+		execute_child1(data, envp);
 	pid[1] = fork();
 	if (pid[1] == -1)
 		free_data_and_exit(data, "fork failed", -1);
@@ -89,5 +83,10 @@ int	pipex(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
-	return status2;
+	if (WIFEXITED(status2)) {
+		exit_code = WEXITSTATUS(status2);
+	} else {
+		//TODO: handle bad exits of child2
+	}
+	return exit_code;
 }
