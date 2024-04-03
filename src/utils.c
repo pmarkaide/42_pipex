@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/03 16:55:31 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:26:26 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ void	get_executable_path(t_data *data)
 	int		i;
 	char	*exec_path;
 
+	exec_path = data->cmd[0];
+	if (!access(exec_path, F_OK | X_OK))
+	{
+		data->exec_path = exec_path;
+		return;
+	}
 	i = 0;
 	while (data->paths[i])
 	{
