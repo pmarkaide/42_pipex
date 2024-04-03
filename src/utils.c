@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/16 16:43:23 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/03 16:55:31 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	get_executable_path(t_data *data)
 		free(exec_path);
 		i++;
 	}
-	free_data_and_exit(data, "No executable found");
+	free_data_and_exit(data, "command not found", 127);
 }
 
 char	**parse_paths(char **envp)

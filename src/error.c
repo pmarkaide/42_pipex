@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/16 17:12:19 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/03 17:08:03 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	exit_1(const char *error_msg)
 
 void free_data_and_exit(t_data *data, const char *error_msg, int exit_code)
 {
-	ft_printf("pipex: ");
+	ft_putstr_fd("pipex: ",2);
 	free_data(data);
 	perror(error_msg);
 	exit(exit_code);
