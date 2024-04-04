@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/03/16 17:11:59 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/04 19:24:06 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 #include <sys/wait.h>           /* for waitpid, wait, */
 #include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
 	execve, fork, pipe */
+
+#define NO_FILE 1
+#define PERMISSION_DENIED 126
+#define COMMAND_NOT_FOUND 127
+#define INVALID_ARGUMENT 2
+#define OPERATION_NOT_PERMITTED 1
 
 typedef struct s_data
 {
