@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/02 20:12:52 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:10:15 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	execute_cmd(t_data *data, char **envp)
 {
 	if (execve(data->exec_path, data->cmd, envp) == -1)
+	{
+		ft_putstr_fd("execve failed\n",2);
 		return (EXIT_FAILURE);
+	}
 	return (0);
 }
 
@@ -28,12 +31,12 @@ int	execute_child1(t_data *data, char **envp)
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (in_fd == -1)
-		free_data_and_exit(data, data->infile, 5);
+		free_data_and_exit(data, data->infile, NO_FILE);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		free_data_and_exit(data, "dup21 error", -1);
 	close(in_fd);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		free_data_and_exit(data, "dup21 error", -1);
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
 	get_executable_path(data);
@@ -47,12 +50,12 @@ void	execute_child2(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out_fd == -1)
-		free_data_and_exit(data, data->outfile, 5);
+		free_data_and_exit(data, data->outfile, OPERATION_NOT_PERMITTED);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		free_data_and_exit(data, "dup22 error", -1);
 	close(data->pipe_fd[0]);
 	if (dup2(out_fd, STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		free_data_and_exit(data, "dup22 error", -1);
 	close(out_fd);
 	data->cmd = data->cmd2;
 	get_executable_path(data);

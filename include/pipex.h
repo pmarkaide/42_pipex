@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/04 19:24:06 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/17 17:59:58 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);
 int			pipex(t_data *data, char **envp);
 int			execute_cmd(t_data *data, char **envp);
+void		eval_executable_permissions(t_data *data);
 void		get_executable_path(t_data *data);

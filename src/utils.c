@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/03 17:26:26 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/17 18:10:44 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,33 @@ void	get_executable_path(t_data *data)
 	char	*exec_path;
 
 	exec_path = data->cmd[0];
-	if (!access(exec_path, F_OK | X_OK))
+	if (!access(exec_path, F_OK))
 	{
 		data->exec_path = exec_path;
+		eval_executable_permissions(data);
 		return;
 	}
 	i = 0;
 	while (data->paths[i])
 	{
 		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
-		//access returns -1 and errno on error; 0 on sucess
-		if (!access(exec_path, F_OK | X_OK))
+		if (!access(exec_path, F_OK))
 		{
 			data->exec_path = exec_path;
+			eval_executable_permissions(data);
 			return ;
 		}
 		free(exec_path);
 		i++;
 	}
-	free_data_and_exit(data, "command not found", 127);
+	free_data_and_exit(data, "command not found:", COMMAND_NOT_FOUND);
+}
+
+void eval_executable_permissions(t_data *data)
+{
+	if (!access(data->exec_path, X_OK))
+		return;
+	free_data_and_exit(data, "Permission denied:", PERMISSION_DENIED);
 }
 
 char	**parse_paths(char **envp)
