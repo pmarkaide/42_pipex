@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/17 17:59:58 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:50:18 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sys/wait.h>           /* for waitpid, wait, */
 #include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
 	execve, fork, pipe */
+#include <errno.h>				/* for errno         */
 
 #define NO_FILE 1
 #define PERMISSION_DENIED 126
@@ -42,7 +43,7 @@ int			error_1(const char *error_message);
 char		*error_null(const char *error_message);
 void		exit_1(const char *error_msg);
 void		free_data(t_data *data);
-void		free_data_and_exit(t_data *data, const char *error_msg, int exit_code);
+void		free_data_and_exit(t_data *data, char *file, int exit_code);
 void		init_struct(t_data *data, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);

@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/03 17:08:03 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:06:10 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,17 @@ void	exit_1(const char *error_msg)
 	exit(1);
 }
 
-void free_data_and_exit(t_data *data, const char *error_msg, int exit_code)
+void free_data_and_exit(t_data *data, char *file, int exit_code)
 {
-	ft_putstr_fd("pipex: ",2);
+	ft_putstr_fd("pipex: ", 2);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(": ", 2);
+	if(errno == EACCES)
+		ft_putstr_fd("Permission denied\n", 2);
+	else if (errno == ENOENT)
+		ft_putstr_fd("No such file or directory\n", 2);
+	else
+		perror("");
 	free_data(data);
-	perror(error_msg);
 	exit(exit_code);
 }

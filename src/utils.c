@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/17 18:10:44 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:15:51 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ void	get_executable_path(t_data *data)
 		free(exec_path);
 		i++;
 	}
-	free_data_and_exit(data, "command not found:", COMMAND_NOT_FOUND);
+	free_data_and_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
 }
 
 void eval_executable_permissions(t_data *data)
 {
 	if (!access(data->exec_path, X_OK))
 		return;
-	free_data_and_exit(data, "Permission denied:", PERMISSION_DENIED);
+	free_data_and_exit(data, data->exec_path, PERMISSION_DENIED);
 }
 
 char	**parse_paths(char **envp)
