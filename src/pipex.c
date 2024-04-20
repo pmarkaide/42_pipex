@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 10:31:40 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/20 12:10:47 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	pipex(t_data *data, char **envp)
 		free_data_and_exit(data, "fork failed",-1);
 	if (pid[0] == 0)
 		execute_child1(data, envp);
+	waitpid(pid[0], &status1, 0);
 	pid[1] = fork();
 	if (pid[1] == -1)
 		free_data_and_exit(data, "fork failed", -1);
@@ -88,7 +89,6 @@ int	pipex(t_data *data, char **envp)
 		execute_child2(data, envp);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
-	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
 	if (WIFEXITED(status2)) {
 		exit_code = WEXITSTATUS(status2);

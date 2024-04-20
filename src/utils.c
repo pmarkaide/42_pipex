@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 10:17:09 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/20 12:19:24 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,33 @@ void	free_data(t_data *data)
 	free_array(data->paths);
 }
 
+
 char	**parse_cmd_args(char *arg)
 {
-	int		i;
-	char	**cmd;
+	char **cmd;
 
-	i = 0;
-	while (arg[i] != '\0')
+	if (ft_str_empty(arg))
 	{
-		if (ft_isspace(arg[i]))
-			arg[i] = ' ';
-		i++;
+		cmd = malloc(sizeof(char *) * 2);
+		if (cmd == NULL)
+			return NULL;
+		cmd[0] = ft_strdup(arg);
+		if (cmd[0] == NULL)
+		{
+			free(cmd);
+			return NULL;
+		}
+		cmd[1] = NULL;
 	}
-	cmd = ft_split(arg, ' ');
-	return (cmd);
+	else
+	{
+		cmd = ft_split(arg, ' ');
+		if (cmd == NULL)
+			return NULL;
+	}
+	return cmd;
 }
+
 
 void eval_executable(t_data *data)
 {
@@ -67,6 +79,8 @@ void eval_executable(t_data *data)
 	local = 0;
 
 	data->exec_path = data->cmd[0];
+	if(ft_str_empty(data->exec_path))
+		free_data_and_exit(data, data->exec_path, COMMAND_NOT_FOUND);
 	if(ft_strncmp(data->cmd[0], "/", 1) == 0)
 		local = 1;
 	if(ft_strncmp(data->cmd[0], "./", 2) == 0)
@@ -75,8 +89,13 @@ void eval_executable(t_data *data)
 		local = 1;
 	if(local)
 	{
-		eval_executable_permissions(data);
-		return;
+		if (access(data->exec_path, F_OK))
+			free_data_and_exit(data, data->exec_path, NO_FILE);
+		else
+		{
+			eval_executable_permissions(data);
+			return;
+		}
 	}
 	else
 		get_executable_path(data);
@@ -137,4 +156,6 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
 	data->exec_path = NULL;
+	if(data->cmd1 == NULL || data->cmd2 == NULL || data->paths == NULL)
+		free_data_and_exit(data, "malloc error", -1);
 }
