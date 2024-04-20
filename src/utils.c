@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/18 17:15:51 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/20 10:17:09 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,33 @@ char	**parse_cmd_args(char *arg)
 	return (cmd);
 }
 
+void eval_executable(t_data *data)
+{
+	int local;
+	local = 0;
+
+	data->exec_path = data->cmd[0];
+	if(ft_strncmp(data->cmd[0], "/", 1) == 0)
+		local = 1;
+	if(ft_strncmp(data->cmd[0], "./", 2) == 0)
+		local = 1;
+	if(ft_strncmp(data->cmd[0], "../", 3) == 0)
+		local = 1;
+	if(local)
+	{
+		eval_executable_permissions(data);
+		return;
+	}
+	else
+		get_executable_path(data);
+}
+
 void	get_executable_path(t_data *data)
 {
 	int		i;
 	char	*exec_path;
 
 	exec_path = data->cmd[0];
-	if (!access(exec_path, F_OK))
-	{
-		data->exec_path = exec_path;
-		eval_executable_permissions(data);
-		return;
-	}
 	i = 0;
 	while (data->paths[i])
 	{
@@ -121,4 +136,5 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->cmd1 = parse_cmd_args(argv[2]);
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
+	data->exec_path = NULL;
 }
