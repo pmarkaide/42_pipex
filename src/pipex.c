@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 10:15:19 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/20 10:31:40 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ int	execute_child1(t_data *data, char **envp)
 	exit_code = 0;
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
-	if (in_fd == -1)
+	if (errno == ENOENT)
 		free_data_and_exit(data, data->infile, NO_FILE);
+	if (errno == EACCES)
+		free_data_and_exit(data, data->infile, PERMISSION_DENIED);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup21 error", -1);
+		free_data_and_exit(data, "dup2 error", -1);
 	close(in_fd);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup21 error", -1);
+		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
 	eval_executable(data);
@@ -49,13 +51,15 @@ void	execute_child2(t_data *data, char **envp)
 	int	out_fd;
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (out_fd == -1)
-		free_data_and_exit(data, data->outfile, OPERATION_NOT_PERMITTED);
+	if (errno == ENOENT)
+		free_data_and_exit(data, data->outfile, NO_FILE);
+	if(errno == EACCES)
+		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup22 error", -1);
+		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[0]);
 	if (dup2(out_fd, STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup22 error", -1);
+		free_data_and_exit(data, "dup2 error", -1);
 	close(out_fd);
 	data->cmd = data->cmd2;
 	eval_executable(data);
