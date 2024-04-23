@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/23 18:22:08 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:28:35 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	free_data(t_data *data)
 	free_array(data->cmd1);
 	free_array(data->cmd2);
 	free_array(data->paths);
+	if(data->exec_path)
+		free(data->exec_path);
 }
 
 
@@ -76,9 +78,13 @@ char	**parse_cmd_args(char *arg)
 void eval_executable(t_data *data)
 {
 	int local;
+	char *exec_path;
 	local = 0;
 
-	data->exec_path = data->cmd[0];
+	exec_path = ft_strdup(data->cmd[0]);
+	if (exec_path == NULL)
+		free_data_and_exit(data, "malloc error", -1);
+	data->exec_path = exec_path;
 	if(ft_str_empty(data->exec_path))
 		free_data_and_exit(data, data->exec_path, COMMAND_NOT_FOUND);
 	if(ft_strncmp(data->cmd[0], "/", 1) == 0)
@@ -89,10 +95,10 @@ void eval_executable(t_data *data)
 		local = 1;
 	if(local || data->paths == NULL)
 	{
-		if (access(data->exec_path, F_OK))
-			free_data_and_exit(data, data->exec_path, NO_FILE);
-		else
+		if (!access(data->exec_path, F_OK))
 			return(eval_executable_permissions(data));
+		else
+			free_data_and_exit(data, data->exec_path, NO_FILE);
 	}
 	else
 		get_executable_path(data);
@@ -110,6 +116,7 @@ void	get_executable_path(t_data *data)
 		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
 		if (!access(exec_path, F_OK))
 		{
+			free(data->exec_path);
 			data->exec_path = exec_path;
 			return(eval_executable_permissions(data));
 		}
