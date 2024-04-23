@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 12:19:24 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/23 18:22:08 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,12 @@ void eval_executable(t_data *data)
 		local = 1;
 	if(ft_strncmp(data->cmd[0], "../", 3) == 0)
 		local = 1;
-	if(local)
+	if(local || data->paths == NULL)
 	{
 		if (access(data->exec_path, F_OK))
 			free_data_and_exit(data, data->exec_path, NO_FILE);
 		else
-		{
-			eval_executable_permissions(data);
-			return;
-		}
+			return(eval_executable_permissions(data));
 	}
 	else
 		get_executable_path(data);
@@ -114,8 +111,7 @@ void	get_executable_path(t_data *data)
 		if (!access(exec_path, F_OK))
 		{
 			data->exec_path = exec_path;
-			eval_executable_permissions(data);
-			return ;
+			return(eval_executable_permissions(data));
 		}
 		free(exec_path);
 		i++;
@@ -156,6 +152,6 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
 	data->exec_path = NULL;
-	if(data->cmd1 == NULL || data->cmd2 == NULL || data->paths == NULL)
+	if(data->cmd1 == NULL || data->cmd2 == NULL)
 		free_data_and_exit(data, "malloc error", -1);
 }
