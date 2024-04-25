@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/23 19:28:35 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:31:02 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	free_data(t_data *data)
 	free_array(data->paths);
 	if(data->exec_path)
 		free(data->exec_path);
+	if(data->shell)
+		free(data->shell);
 }
 
 
@@ -151,6 +153,25 @@ char	**parse_paths(char **envp)
 	return (NULL);
 }
 
+char *parse_shell(char **envp)
+{
+	int		i;
+	char *shell;
+
+	i = 0;
+    while (envp[i])
+    {
+        if (ft_strnstr(envp[i], "SHELL=", 6))
+		{
+            shell = ft_strdup(envp[i] + 6);
+            return (shell);
+        }
+        i++;
+    }
+	shell = ft_strdup("/bin/sh");
+	return (shell);
+}
+
 void	init_struct(t_data *data, char **argv, char **envp)
 {
 	data->infile = argv[1];
@@ -158,6 +179,7 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->cmd1 = parse_cmd_args(argv[2]);
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
+	data->shell = parse_shell(envp);
 	data->exec_path = NULL;
 	if(data->cmd1 == NULL || data->cmd2 == NULL)
 		free_data_and_exit(data, "malloc error", -1);

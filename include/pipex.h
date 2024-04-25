@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 10:11:17 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:12:17 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_data
 	char	*exec_path;
 	char	**cmd;
 	char	**paths;
+	char	*shell;
 }			t_data;
 
 int			error_1(const char *error_message);
