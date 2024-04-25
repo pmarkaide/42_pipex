@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/23 18:35:00 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:08:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void free_data_and_exit(t_data *data, char *file, int exit_code)
 		ft_putstr_fd("No such file or directory\n", 2);
 	else if (exit_code == PERMISSION_DENIED)
 		ft_putstr_fd("Permission denied\n", 2);
+	else if (exit_code == IS_DIRECTORY)
+		ft_putstr_fd("Is a directory\n", 2);
 	else
 		perror("");
 	free_data(data);

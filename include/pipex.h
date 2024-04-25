@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/25 20:12:17 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:09:11 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #define COMMAND_NOT_FOUND 127
 #define INVALID_ARGUMENT 2
 #define OPERATION_NOT_PERMITTED 1
+#define IS_DIRECTORY -1
 
 typedef struct s_data
 {
@@ -53,4 +54,5 @@ int			execute_cmd(t_data *data, char **envp);
 void		eval_executable(t_data *data);
 void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
+void		cmd_is_directory(t_data *data);
 
