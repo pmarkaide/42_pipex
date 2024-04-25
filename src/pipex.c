@@ -6,18 +6,36 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/20 12:10:47 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/04/25 20:40:20 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int	execute_cmd(t_data *data, char **envp)
+int execute_shell_cmd(t_data *data, char **envp)
 {
-	if (execve(data->exec_path, data->cmd, envp) == -1)
-	{
+	char *shell_cmd[4];
+	shell_cmd[0] = data->shell;
+    shell_cmd[1] = "-c";
+    shell_cmd[2] = data->cmd[0];
+    shell_cmd[3] = NULL;
+
+	if (execve(data->shell, shell_cmd, envp) == -1)
+    {
 		ft_putstr_fd("execve failed\n",2);
 		return (EXIT_FAILURE);
+    }
+	return (0);
+}
+
+int	execute_cmd(t_data *data, char **envp)
+{
+	int exit_code;
+
+	if (execve(data->exec_path, data->cmd, envp) == -1)
+	{
+		exit_code = execute_shell_cmd(data, envp);
+		return (exit_code);
 	}
 	return (0);
 }
@@ -81,7 +99,6 @@ int	pipex(t_data *data, char **envp)
 		free_data_and_exit(data, "fork failed",-1);
 	if (pid[0] == 0)
 		execute_child1(data, envp);
-	waitpid(pid[0], &status1, 0);
 	pid[1] = fork();
 	if (pid[1] == -1)
 		free_data_and_exit(data, "fork failed", -1);
@@ -89,11 +106,17 @@ int	pipex(t_data *data, char **envp)
 		execute_child2(data, envp);
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
+	waitpid(pid[0], &status1, 0);
+    if (WIFEXITED(status1) && WEXITSTATUS(status1) != EXIT_SUCCESS)
+    {
+        // Handle error for child process 1
+        exit_code = WEXITSTATUS(status1);
+    }
 	waitpid(pid[1], &status2, 0);
-	if (WIFEXITED(status2)) {
-		exit_code = WEXITSTATUS(status2);
-	} else {
-		//TODO: handle bad exits of child2
-	}
+    if (WIFEXITED(status2) && WEXITSTATUS(status2) != EXIT_SUCCESS)
+    {
+        // Handle error for child process 2
+        exit_code = WEXITSTATUS(status2);
+    }
 	return exit_code;
 }
