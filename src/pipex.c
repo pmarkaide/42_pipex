@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/04/25 21:05:13 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:12:18 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,8 @@ int	pipex(t_data *data, char **envp)
 	close(data->pipe_fd[0]);
 	close(data->pipe_fd[1]);
 	waitpid(pid[0], &status1, 0);
-    if (WIFEXITED(status1) && WEXITSTATUS(status1) != EXIT_SUCCESS)
-    {
-        // Handle error for child process 1
-        exit_code = WEXITSTATUS(status1);
-    }
 	waitpid(pid[1], &status2, 0);
     if (WIFEXITED(status2) && WEXITSTATUS(status2) != EXIT_SUCCESS)
-    {
-        // Handle error for child process 2
-        exit_code = WEXITSTATUS(status2);
-    }
+		exit_code = WEXITSTATUS(status2);
 	return exit_code;
 }
