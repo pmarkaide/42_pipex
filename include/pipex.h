@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/04 19:02:22 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:21:44 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #define COMMAND_NOT_FOUND 127
 #define INVALID_ARGUMENT 2
 #define OPERATION_NOT_PERMITTED 1
-#define IS_DIRECTORY 126
+#define IS_DIRECTORY -1
 
 typedef struct s_data
 {
