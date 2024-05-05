@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/04 18:59:40 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/05 20:57:44 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,53 @@ void	free_data(t_data *data)
 }
 
 
+char* removeEscapeCharacters(const char *arg)
+{
+    int i, j = 0;
+    int len = strlen(arg);
+    char *result = (char *)malloc((len + 1) * sizeof(char)); // Allocate memory for the result string
+
+    for (i = 0; arg[i] != '\0'; i++) {
+        if (arg[i] == '\\' && arg[i + 1] == '\\') {
+            // Skip double backslashes
+            i++;
+        } else if (arg[i] == '\\' && arg[i + 1] == '\"') {
+            // Include escaped double quote
+            result[j++] = arg[i++];
+        } else if (arg[i] == '\\' && arg[i + 1] == '\\') {
+            // Include escaped backslash
+            result[j++] = arg[i++];
+        } else if (arg[i] == '\\') {
+            // Skip single backslashes
+            continue;
+        } else {
+            // Copy other characters as is
+            result[j++] = arg[i];
+        }
+    }
+    result[j] = '\0'; // Null-terminate the result string
+    return result;
+}
+
+char* removeConsecutiveQuotes(const char *arg)
+{
+    int i, j = 0;
+    int len = strlen(arg);
+    char *result = (char *)malloc((len + 1) * sizeof(char)); // Allocate memory for the result string
+
+    for (i = 0; arg[i] != '\0'; i++) {
+        if (arg[i] == '\"' && arg[i + 1] == '\"') {
+            // Skip consecutive double quotes
+            i++;
+        } else {
+            // Copy other characters as is
+            result[j++] = arg[i];
+        }
+    }
+    result[j] = '\0'; // Null-terminate the result string
+    return result;
+}
+
 char	**parse_cmd_args(char *arg)
 {
 	char **cmd;
@@ -78,9 +125,11 @@ char	**parse_cmd_args(char *arg)
 
 void cmd_is_directory(t_data *data)
 {
-
-	int fd = open(data->cmd[0], O_RDONLY | O_DIRECTORY);
-    if (fd != -1) {
+	int fd;
+	
+	fd = open(data->cmd[0], O_RDONLY | O_DIRECTORY);
+    if (fd != -1)
+	{
         free_data_and_exit(data, data->cmd[0], IS_DIRECTORY);
         close(fd);
 	}
@@ -185,7 +234,15 @@ void	init_struct(t_data *data, char **argv, char **envp)
 {
 	data->infile = argv[1];
 	data->outfile = argv[4];
-	data->cmd1 = parse_cmd_args(argv[2]);
+	char *result1 = removeEscapeCharacters(argv[2]);
+	char *result2 = removeConsecutiveQuotes(result1);
+	data->cmd1 = parse_cmd_args(result2);
+	// char *res = (removeEscapeCharacters(removeConsecutiveQuotes(argv[2])));
+	// ft_printf("cmd1: %s\n", res);	
+	// free_data_and_exit(data, "exiting", -1);
+	// data->cmd1 = parse_cmd_args(res);
+	// ft_print_array(data->cmd1);
+	// free_data_and_exit(data, "exiting", -1);
 	data->cmd2 = parse_cmd_args(argv[3]);
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
