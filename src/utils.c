@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/05 20:57:44 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/07 18:30:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,16 @@ char	**parse_cmd_args(char *arg)
 	return cmd;
 }
 
+char **clean_arguments(char *arg)
+{
+	char *clean1 = removeEscapeCharacters(arg);
+	char *clean2 = removeConsecutiveQuotes(clean1);
+	char **args = parse_cmd_args(clean2);
+	free(clean1);
+	free(clean2);
+	return args;
+}
+
 void cmd_is_directory(t_data *data)
 {
 	int fd;
@@ -158,7 +168,7 @@ void eval_executable(t_data *data)
 		if (!access(data->exec_path, F_OK))
 			return(eval_executable_permissions(data));
 		else
-			free_data_and_exit(data, data->exec_path, COMMAND_NOT_FOUND);
+			free_data_and_exit(data, data->exec_path, NO_FILE);
 	}
 	else
 		get_executable_path(data);
@@ -234,16 +244,8 @@ void	init_struct(t_data *data, char **argv, char **envp)
 {
 	data->infile = argv[1];
 	data->outfile = argv[4];
-	char *result1 = removeEscapeCharacters(argv[2]);
-	char *result2 = removeConsecutiveQuotes(result1);
-	data->cmd1 = parse_cmd_args(result2);
-	// char *res = (removeEscapeCharacters(removeConsecutiveQuotes(argv[2])));
-	// ft_printf("cmd1: %s\n", res);	
-	// free_data_and_exit(data, "exiting", -1);
-	// data->cmd1 = parse_cmd_args(res);
-	// ft_print_array(data->cmd1);
-	// free_data_and_exit(data, "exiting", -1);
-	data->cmd2 = parse_cmd_args(argv[3]);
+	data->cmd1 = clean_arguments(argv[2]);
+	data->cmd2 = clean_arguments(argv[3]);
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
 	data->exec_path = NULL;
