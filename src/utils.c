@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/07 18:30:32 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:11:04 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,21 @@ char* removeEscapeCharacters(const char *arg)
     return result;
 }
 
-char* removeConsecutiveQuotes(const char *arg)
+char *removeConsecutiveQuotes(const char *arg)
 {
-    int i, j = 0;
-    int len = strlen(arg);
-    char *result = (char *)malloc((len + 1) * sizeof(char)); // Allocate memory for the result string
-
-    for (i = 0; arg[i] != '\0'; i++) {
-        if (arg[i] == '\"' && arg[i + 1] == '\"') {
-            // Skip consecutive double quotes
-            i++;
-        } else {
-            // Copy other characters as is
-            result[j++] = arg[i];
-        }
+    int i = 0;
+    int j = 0;
+    char *result = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
+    if(result == NULL)
+        return NULL;
+    while (arg[i] != '\0')
+    {
+        if (arg[i] == '\"' && arg[i + 1] == '\"')
+            i += 2;
+        else
+            result[j++] = arg[i++];
     }
-    result[j] = '\0'; // Null-terminate the result string
+	result[j] = '\0';
     return result;
 }
 
@@ -125,10 +124,10 @@ char	**parse_cmd_args(char *arg)
 
 char **clean_arguments(char *arg)
 {
-	char *clean1 = removeEscapeCharacters(arg);
-	char *clean2 = removeConsecutiveQuotes(clean1);
+	//char *clean1 = removeEscapeCharacters(arg);
+	char *clean2 = removeConsecutiveQuotes(arg);
 	char **args = parse_cmd_args(clean2);
-	free(clean1);
+	//free(clean1);false
 	free(clean2);
 	return args;
 }
@@ -246,6 +245,8 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->outfile = argv[4];
 	data->cmd1 = clean_arguments(argv[2]);
 	data->cmd2 = clean_arguments(argv[3]);
+	//ft_print_array(data->cmd2);
+	//free_data_and_exit(data, "malloc error", -1);
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
 	data->exec_path = NULL;
