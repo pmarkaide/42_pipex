@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/04 19:12:18 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:37:36 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,9 @@ int	pipex(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
-    if (WIFEXITED(status2) && WEXITSTATUS(status2) != EXIT_SUCCESS)
+	if (WIFSIGNALED(status2) && WTERMSIG(status2) == SIGSEGV)
+		exit_code = 139;
+    else if (WIFEXITED(status2) && WEXITSTATUS(status2) != EXIT_SUCCESS)
 		exit_code = WEXITSTATUS(status2);
 	return exit_code;
 }

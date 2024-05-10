@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/04 19:21:44 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:28:59 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 #include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
 	execve, fork, pipe */
 #include <errno.h>				/* for errno         */
+#include <signal.h>				/* for segfault signal        */
 
 #define NO_FILE 1
 #define PERMISSION_DENIED 126
 #define COMMAND_NOT_FOUND 127
-#define INVALID_ARGUMENT 2
-#define OPERATION_NOT_PERMITTED 1
+#define SEGFAULT 139
 #define IS_DIRECTORY -1
+#define EXEC_NOT_FOUND -2
 
 typedef struct s_data
 {

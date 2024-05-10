@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/10 11:58:51 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:16:31 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,15 @@ char *remove_str_quotes(const char *arg)
 
 	i = 0;
 	len = ft_strlen(arg);
+	if (len == 0)
+		return ft_strdup(arg);
 	result = (char *)malloc((len + 1) * sizeof(char));
 	if(result == NULL)
 		return NULL;
-	if(arg[len - 1] == '\"' || arg[len - 1] == '\'')
-		len--;
 	if(arg[0] == '\"' || arg[0] == '\'')
 		i++;
+	if(arg[len - 1] == '\"' || arg[len - 1] == '\'')
+		len--;
 	ft_strncpy(result, arg + i, len - i);
 	result[len - i] = '\0';
 	return result;
@@ -203,7 +205,7 @@ void eval_executable(t_data *data)
 		if (!access(data->exec_path, F_OK))
 			return(eval_executable_permissions(data));
 		else
-			free_data_and_exit(data, data->exec_path, NO_FILE);
+			free_data_and_exit(data, data->exec_path, EXEC_NOT_FOUND);
 	}
 	else
 		get_executable_path(data);
