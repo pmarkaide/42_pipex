@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/10 14:16:31 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/26 17:15:04 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,39 +50,16 @@ void	free_data(t_data *data)
 }
 
 
-char* removeEscapeCharacters(const char *arg)
-{
-    int i, j = 0;
-    int len = strlen(arg);
-    char *result = (char *)malloc((len + 1) * sizeof(char)); // Allocate memory for the result string
-
-    for (i = 0; arg[i] != '\0'; i++) {
-        if (arg[i] == '\\' && arg[i + 1] == '\\') {
-            // Skip double backslashes
-            i++;
-        } else if (arg[i] == '\\' && arg[i + 1] == '\"') {
-            // Include escaped double quote
-            result[j++] = arg[i++];
-        } else if (arg[i] == '\\' && arg[i + 1] == '\\') {
-            // Include escaped backslash
-            result[j++] = arg[i++];
-        } else if (arg[i] == '\\') {
-            // Skip single backslashes
-            continue;
-        } else {
-            // Copy other characters as is
-            result[j++] = arg[i];
-        }
-    }
-    result[j] = '\0'; // Null-terminate the result string
-    return result;
-}
 
 char *remove_double_quotes(const char *arg)
 {
-    int i = 0;
-    int j = 0;
-    char *result = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
+    int i;
+    int j;
+    char *result;
+
+	i = 0;
+	j = 0;
+	result = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
     if(result == NULL)
         return NULL;
     while (arg[i] != '\0')
@@ -120,7 +97,9 @@ char *remove_str_quotes(const char *arg)
 
 void remove_array_quotes(char **array)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	while (array[i] != NULL)
 	{
 		char *new_str = remove_str_quotes(array[i]);
@@ -133,40 +112,85 @@ void remove_array_quotes(char **array)
 	}
 }
 
-char	**parse_cmd_args(char *arg)
+int count_args(char *arg)
 {
-	char **cmd;
+    int count;
+    int i;
 
-	if (ft_str_empty(arg))
+	count = 0;
+	i = 0;
+    if (arg[i] != '\0')
+        count = 1;
+    while (arg[i] != '\0')
 	{
-		cmd = malloc(sizeof(char *) * 2);
-		if (cmd == NULL)
-			return NULL;
-		cmd[0] = ft_strdup(arg);
-		if (cmd[0] == NULL)
-		{
-			free(cmd);
-			return NULL;
-		}
-		cmd[1] = NULL;
-	}
+        if (arg[i] == ' ' && (i == 0 || arg[i - 1] != '\\'))
+            count++;
+        i++;
+    }
+    return count;
+}
+
+char **handle_empty_arg(char *arg)
+{
+    char **cmd;
+
+	cmd = malloc(sizeof(char *) * 2);
+    if (cmd == NULL)
+        return NULL;
+    cmd[0] = ft_strdup(arg);
+    if (cmd[0] == NULL)
+	{
+        free(cmd);
+        return NULL;
+    }
+    cmd[1] = NULL;
+    return cmd;
+}
+
+char **handle_non_empty_arg(char *arg)
+{
+    char **cmd;
+    int i;
+	int start;
+	int arg_count;
+
+    i = 0;
+    arg_count = 0;
+    start = 0;
+    cmd = malloc(sizeof(char *) * (count_args(arg) + 1));
+    if (cmd == NULL)
+        return NULL;
+    while (arg[i] != '\0') {
+        if (arg[i] == ' ' && (i == 0 || arg[i - 1] != '\\')) {
+            cmd[arg_count] = ft_substr(arg, start, i - start);
+            start = i + 1;
+            arg_count++;
+        }
+        i++;
+    }
+    cmd[arg_count] = ft_substr(arg, start, i - start);
+    cmd[arg_count + 1] = NULL;
+    return cmd;
+}
+
+char **parse_cmd_args(char *arg) {
+    char **cmd;
+    if (ft_str_empty(arg))
+        cmd = handle_empty_arg(arg);
 	else
-	{
-		cmd = ft_split(arg, ' ');
-		if (cmd == NULL)
-			return NULL;
-	}
-	return cmd;
+        cmd = handle_non_empty_arg(arg);
+    return cmd;
 }
 
 char **clean_arguments(char *arg)
 {
-	//char *clean1 = removeEscapeCharacters(arg);
-	char *clean2 = remove_double_quotes(arg);
-	char **args = parse_cmd_args(clean2);
+	char *clean;
+	char **args;
+
+	clean = remove_double_quotes(arg);
+	args = parse_cmd_args(clean);
 	remove_array_quotes(args);
-	//free(clean1);false
-	free(clean2);
+	free(clean);
 	return args;
 }
 
