@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/26 17:15:04 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:35:21 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ char *remove_double_quotes(const char *arg)
     int j;
     char *result;
 
-	i = 0;
-	j = 0;
-	result = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
+    i = 0;
+    j = 0;
+    result = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
     if(result == NULL)
         return NULL;
     while (arg[i] != '\0')
@@ -69,30 +69,55 @@ char *remove_double_quotes(const char *arg)
         else
             result[j++] = arg[i++];
     }
-	result[j] = '\0';
+    result[j] = '\0';
     return result;
 }
 
-char *remove_str_quotes(const char *arg)
+int is_non_escape_char(char c)
 {
-	int len;
+    if (c == 'n' || c == 'r' || c == 't' ||
+        c == 'v' || c == '\\' || c == '\'' ||
+        c == '\"' || c == '0')
+        return 0;
+    else
+        return 1;
+}
+
+char *allocate_result(const char *arg)
+{
+    int len = ft_strlen(arg);
+    if (len == 0)
+        return ft_strdup(arg);
+    return (char *)malloc((len + 1) * sizeof(char));
+}
+
+char *remove_str_quotes_and_escape_chars(const char *arg)
+{
 	int i;
+	int j;
+	int in_double_quotes;
 	char *result;
 
 	i = 0;
-	len = ft_strlen(arg);
-	if (len == 0)
-		return ft_strdup(arg);
-	result = (char *)malloc((len + 1) * sizeof(char));
+	j = 0;
+	in_double_quotes = 0;
+	result = allocate_result(arg);
 	if(result == NULL)
 		return NULL;
-	if(arg[0] == '\"' || arg[0] == '\'')
-		i++;
-	if(arg[len - 1] == '\"' || arg[len - 1] == '\'')
-		len--;
-	ft_strncpy(result, arg + i, len - i);
-	result[len - i] = '\0';
-	return result;
+	while(arg[i])
+    {
+        if(arg[i] == '\"')
+        {
+            in_double_quotes = !in_double_quotes;
+            i++;
+            continue;
+        }
+        if(arg[i] == '\\' && (!in_double_quotes || (in_double_quotes && !is_non_escape_char(arg[i+1]))))
+            i++;
+        result[j++] = arg[i++];
+    }
+    result[j] = '\0';
+    return result;
 }
 
 void remove_array_quotes(char **array)
@@ -102,7 +127,7 @@ void remove_array_quotes(char **array)
 	i = 0;
 	while (array[i] != NULL)
 	{
-		char *new_str = remove_str_quotes(array[i]);
+		char *new_str = remove_str_quotes_and_escape_chars(array[i]);
 		if (new_str != NULL)
 		{
 			free(array[i]);
@@ -151,8 +176,8 @@ char **handle_non_empty_arg(char *arg)
 {
     char **cmd;
     int i;
-	int start;
-	int arg_count;
+    int start;
+    int arg_count;
 
     i = 0;
     arg_count = 0;
