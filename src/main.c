@@ -15,7 +15,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	int	exit_code;
+	int		exit_code;
 
 	if (argc != 5)
 		exit_1("5 arguments needed\nUsage: ./pipex infile cmd1 cmd2 outfile");

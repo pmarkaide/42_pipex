@@ -3,31 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/05/10 14:28:59 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/05 12:10:41 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/colors.h"  /* color codes for printf*/
-#include "../lib/libft/libft.h" /*libft library*/
-#include <fcntl.h>              /* for open, */
-#include <stdio.h>              /* for perror, strerror, access */
-#include <stdlib.h>             /* for malloc, free, exit */
-#include <string.h>             /* for strerror */
-#include <sys/wait.h>           /* for waitpid, wait, */
-#include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
-	execve, fork, pipe */
-#include <errno.h>				/* for errno         */
-#include <signal.h>				/* for segfault signal        */
+#ifndef PIPEX_H
+# define PIPEX_H
 
-#define NO_FILE 1
-#define PERMISSION_DENIED 126
-#define COMMAND_NOT_FOUND 127
-#define SEGFAULT 139
-#define IS_DIRECTORY -1
-#define EXEC_NOT_FOUND -2
+# include "../include/colors.h"  /* color codes for printf */
+# include "../lib/libft/libft.h" /* libft library */
+# include <fcntl.h>              /* for open, */
+# include <stdio.h>              /* for perror, strerror, access */
+# include <stdlib.h>             /* for malloc, free, exit */
+# include <string.h>             /* for strerror */
+# include <sys/wait.h>           /* for waitpid, wait, */
+# include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
+	execve, fork, pipe */
+# include <errno.h>              /* for errno */
+# include <signal.h>             /* for segfault signal */
+
+# define NO_FILE 1
+# define PERMISSION_DENIED 126
+# define COMMAND_NOT_FOUND 127
+# define SEGFAULT 139
+# define IS_DIRECTORY -1
+# define EXEC_NOT_FOUND -2
 
 typedef struct s_data
 {
@@ -42,8 +45,6 @@ typedef struct s_data
 	char	*shell;
 }			t_data;
 
-int			error_1(const char *error_message);
-char		*error_null(const char *error_message);
 void		exit_1(const char *error_msg);
 void		free_data(t_data *data);
 void		free_data_and_exit(t_data *data, char *file, int exit_code);
@@ -56,4 +57,9 @@ void		eval_executable(t_data *data);
 void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
 void		cmd_is_directory(t_data *data);
+char		**clean_arguments(char *arg);
+int			execute_child1(t_data *data, char **envp);
+void		execute_child2(t_data *data, char **envp);
+char		*allocate_result(const char *arg);
 
+#endif /* PIPEX_H */
