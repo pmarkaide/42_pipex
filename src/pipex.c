@@ -6,11 +6,23 @@
 /*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 11:43:13 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:13:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+int	get_exit_code(int status)
+{
+	int	exit_code;
+
+	exit_code = 0;
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGSEGV)
+		exit_code = 139;
+	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
+		exit_code = WEXITSTATUS(status);
+	return (exit_code);
+}
 
 int	pipex(t_data *data, char **envp)
 {
@@ -36,9 +48,6 @@ int	pipex(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	waitpid(pid[0], &status1, 0);
 	waitpid(pid[1], &status2, 0);
-	if (WIFSIGNALED(status2) && WTERMSIG(status2) == SIGSEGV)
-		exit_code = 139;
-	else if (WIFEXITED(status2) && WEXITSTATUS(status2) != EXIT_SUCCESS)
-		exit_code = WEXITSTATUS(status2);
+	exit_code = get_exit_code(status2);
 	return (exit_code);
 }
