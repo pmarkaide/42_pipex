@@ -3,34 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   clean_str.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:34:54 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 12:01:36 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:22:24 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int	is_non_escape_char(char c)
-{
-	if (c == 'n' || c == 'r' || c == 't' || c == 'v' || c == '\\' || c == '\''
-		|| c == '\"' || c == '0')
-		return (0);
-	else
-		return (1);
-}
-
-char	*remove_str_quotes_and_escape_chars(const char *arg)
+char	*remove_str_quotes(const char *arg)
 {
 	int		i;
 	int		j;
-	int		in_double_quotes;
+	int		quote;
 	char	*result;
 
 	i = 0;
 	j = 0;
-	in_double_quotes = 0;
+	quote = 0;
 	result = allocate_result(arg);
 	if (result == NULL)
 		return (NULL);
@@ -38,12 +29,11 @@ char	*remove_str_quotes_and_escape_chars(const char *arg)
 	{
 		if (arg[i] == '\"')
 		{
-			in_double_quotes = !in_double_quotes;
+			quote = !quote;
 			i++;
 			continue ;
 		}
-		if (arg[i] == '\\' && (!in_double_quotes || (in_double_quotes
-					&& !is_non_escape_char(arg[i + 1]))))
+		if (arg[i] == '\\' && arg[i + 1] != '\0' && !quote)
 			i++;
 		result[j++] = arg[i++];
 	}
@@ -59,7 +49,7 @@ void	remove_array_quotes(char **array)
 	i = 0;
 	while (array[i] != NULL)
 	{
-		new_str = remove_str_quotes_and_escape_chars(array[i]);
+		new_str = remove_str_quotes(array[i]);
 		if (new_str != NULL)
 		{
 			free(array[i]);
@@ -97,7 +87,14 @@ char	**clean_arguments(char *arg)
 	char	**args;
 
 	clean = remove_double_quotes(arg);
+	if (clean == NULL)
+		return (NULL);
 	args = parse_cmd_args(clean);
+	if (args == NULL)
+	{
+		free(clean);
+		return (NULL);
+	}
 	remove_array_quotes(args);
 	free(clean);
 	return (args);
