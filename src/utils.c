@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 12:54:49 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/06 14:32:19 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,14 @@ void	init_struct(t_data *data, char **argv, char **envp)
 {
 	data->infile = argv[1];
 	data->outfile = argv[4];
+	data->pipe_fd[0] = -1;
+	data->pipe_fd[1] = -1;
 	data->cmd1 = clean_arguments(argv[2]);
 	data->cmd2 = clean_arguments(argv[3]);
+	data->exec_path = NULL;
+	data->cmd = NULL;
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
-	data->exec_path = NULL;
 	if (data->cmd1 == NULL || data->cmd2 == NULL)
 		free_data_and_exit(data, "malloc error", -1);
 }

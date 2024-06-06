@@ -6,14 +6,13 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 13:14:35 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/10 12:23:25 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include "../include/colors.h"  /* color codes for printf */
 # include "../lib/libft/libft.h" /* libft library */
 # include <fcntl.h>              /* for open, O_DIRECTORY */
 # include <stdlib.h>             /* for malloc, free, exit */
@@ -41,7 +40,6 @@ typedef struct s_data
 	char	*shell;
 }			t_data;
 
-void		exit_1(const char *error_msg);
 void		free_data(t_data *data);
 void		free_data_and_exit(t_data *data, char *file, int exit_code);
 void		init_struct(t_data *data, char **argv, char **envp);
@@ -58,5 +56,7 @@ int			execute_child1(t_data *data, char **envp);
 void		execute_child2(t_data *data, char **envp);
 char		*allocate_result(const char *arg);
 char		*remove_str_quotes(char *arg);
+int			error_msg(char *msg);
+void		close_pipes(t_data *data);
 
 #endif /* PIPEX_H */
