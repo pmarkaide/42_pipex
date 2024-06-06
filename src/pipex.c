@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:42:37 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 15:13:16 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:54:54 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	get_exit_code(int status)
 	int	exit_code;
 
 	exit_code = 0;
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGSEGV)
-		exit_code = 139;
+	if (WIFSIGNALED(status) && WTERMSIG(status))
+		exit_code = 128 + WTERMSIG(status);
 	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
 		exit_code = WEXITSTATUS(status);
 	return (exit_code);

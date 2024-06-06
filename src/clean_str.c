@@ -6,13 +6,13 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:34:54 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 21:22:24 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:54:38 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-char	*remove_str_quotes(const char *arg)
+char	*remove_str_quotes(char *arg)
 {
 	int		i;
 	int		j;

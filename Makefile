@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+         #
+#    By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/18 13:04:46 by pmarkaid          #+#    #+#              #
-#    Updated: 2024/06/05 12:01:54 by pmarkaid         ###   ########.fr        #
+#    Updated: 2024/06/06 12:54:32 by pmarkaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 12:10:41 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:14:35 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 
 # include "../include/colors.h"  /* color codes for printf */
 # include "../lib/libft/libft.h" /* libft library */
-# include <fcntl.h>              /* for open, */
-# include <stdio.h>              /* for perror, strerror, access */
+# include <fcntl.h>              /* for open, O_DIRECTORY */
 # include <stdlib.h>             /* for malloc, free, exit */
-# include <string.h>             /* for strerror */
 # include <sys/wait.h>           /* for waitpid, wait, */
-# include <unistd.h>             /* for close, read, write, unlink, dup, dup2,
-	execve, fork, pipe */
+# include <unistd.h>             /* for file r/w, dup2, execve, fork, pipe */
 # include <errno.h>              /* for errno */
-# include <signal.h>             /* for segfault signal */
 
 # define NO_FILE 1
 # define PERMISSION_DENIED 126
@@ -61,5 +57,6 @@ char		**clean_arguments(char *arg);
 int			execute_child1(t_data *data, char **envp);
 void		execute_child2(t_data *data, char **envp);
 char		*allocate_result(const char *arg);
+char		*remove_str_quotes(char *arg);
 
 #endif /* PIPEX_H */

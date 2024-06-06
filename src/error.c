@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmarkaid <pmarkaid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/05 11:39:34 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:15:34 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
-void	exit_1(const char *error_msg)
-{
-	ft_printf("%sError\n%s\n", RED, DEFAULT);
-	perror(error_msg);
-	exit(1);
-}
 
 void	free_array(char **array)
 {
@@ -69,8 +62,6 @@ void	free_data_and_exit(t_data *data, char *file, int exit_code)
 		ft_putstr_fd("No such file or directory\n", 2);
 		exit_code = 127;
 	}
-	else
-		perror("");
 	free_data(data);
 	exit(exit_code);
 }
