@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:46 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 12:54:59 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/10 15:06:39 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	execute_child2(t_data *data, char **envp)
 	int	out_fd;
 
 	close(data->pipe_fd[1]);
-	out_fd = open(data->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (errno == ENOENT)
 		free_data_and_exit(data, data->outfile, NO_FILE);
 	if (errno == EACCES)
