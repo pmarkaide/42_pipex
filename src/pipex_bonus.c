@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 17:01:51 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/11 21:21:39 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,15 @@ int	pipex(t_data *data, char **envp)
 
 int	pipex(t_data *data, char **envp)
 {
-	int i;
+	int cmd;
 	int	exit_code;
-	int	in;
+	int	read_end;
 	pid_t	pid[2];
 
-	i = 0;
+	cmd = 0;
 	exit_code = 0;
-	in = 0;
-	while(i < data->num_cmd -1)
+	read_end = 0;
+	while(cmd < data->num_cmd -1)
 	{
 		pipe(data->pipe_fd);
 		pid[0] = fork();
@@ -72,20 +72,28 @@ int	pipex(t_data *data, char **envp)
 			return (error_msg("fork failed"));
 		if (pid[0] == 0)
 		{
-			dup_file_descriptors(data, i);
+			dup_file_descriptors(data, cmd, read_end);
 			cmd_is_directory(data);
 			eval_executable(data);
 			exit_code = execute_cmd(data, envp);
-			close_pipes(data);
+			exit(exit_code);
+		}
+		else
+		{
+			waitpid(pid[0], &exit_code, 0);
+			close(data->pipe_fd[1]);
+			if (read_end != data->in_fd)
+				close(read_end);
+			read_end = data->pipe_fd[0];
 		}
 	}
+	close(read_end);
 	close_pipes(data);
-	//waitpid
 	return (exit_code);
 }
 
 //TODO: create a dup2 oneliner: execute > eval > exit
-void dup_file_descriptors(t_data *data, int cmd)
+void dup_file_descriptors(t_data *data, int cmd, int read_end)
 {
 	if(cmd == 0)
 	{
@@ -93,21 +101,27 @@ void dup_file_descriptors(t_data *data, int cmd)
 		if(dup2(data->in_fd, STDIN_FILENO) < 0)
 			free_data_and_exit(data, "dup2 error", -1);
 		close(data->in_fd);
+		if(dup2(data->pipe_fd[1], STDOUT_FILENO) < 0)
+			free_data_and_exit(data, "dup2 error", -1);
+		close(data->pipe_fd[1]);
 	}
 	else if(cmd == data->num_cmd -1)
 	{
 		open_outfile(data);
-		if(dup2(data->pipe_fd[0], STDOUT_FILENO) < 0)
+		if(dup2(read_end, STDIN_FILENO) < 0)
 			free_data_and_exit(data, "dup2 error", -1);
-		close(data->pipe_fd[0]);
+		close(read_end);
+		if(dup2(data->out_fd, STDOUT_FILENO) < 0)
+			free_data_and_exit(data, "dup2 error", -1);
+		close(data->out_fd);
 	}
 	else
 	{
-		if(dup2(data->pipe_fd, STDIN_FILENO) < 0)
+		if(dup2(read_end, STDIN_FILENO) < 0)
 			free_data_and_exit(data, "dup2 error", -1);
-		if(dup2(data->pipe_fd, STDOUT_FILENO) < 0)
+		close(read_end);
+		if(dup2(data->pipe_fd[1], STDOUT_FILENO) < 0)
 			free_data_and_exit(data, "dup2 error", -1);
-		close(data->pipe_fd[0]);
 		close(data->pipe_fd[1]);
 	}
 }

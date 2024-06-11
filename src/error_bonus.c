@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 15:55:21 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/11 21:22:45 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,16 @@ void	free_array(char **array)
 	free(array);
 }
 
-void close_pipes(t_data *data) {
-    if (data == NULL || data->pipe_fd == NULL) {
-        return; 
-    }
-
-    int i = 0;
-    while (i < data->num_cmd - 1) {
-        if (data->pipe_fd[i] != NULL) {
-            close(data->pipe_fd[i][0]); 
-            close(data->pipe_fd[i][1]); 
-            free(data->pipe_fd[i]);      
-            data->pipe_fd[i] = NULL;     
-        }
-        i++;
-    }
-
-
-    free(data->pipe_fd);
-    data->pipe_fd = NULL;
+void close_open_fds(t_data *data)
+{
+	if (data->pipe_fd[0] != -1)
+		close(data->pipe_fd[0]);
+	if (data->pipe_fd[1] != -1)
+		close(data->pipe_fd[1]);
+	if(data->in_fd != -1)
+		close(data->in_fd);
+	if(data->out_fd != -1)
+		close(data->out_fd);
 }
 
 
