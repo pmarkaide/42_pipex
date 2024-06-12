@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 16:58:57 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:33:31 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		execute_child2(t_data *data, char **envp);
 char		*allocate_result(const char *arg);
 char		*remove_str_quotes(char *arg);
 int			error_msg(char *msg);
-void		close_pipes(t_data *data);
+void		close_open_fds(t_data *data);
 void		open_infile(t_data *data);
 void		open_outfile(t_data *data);
 

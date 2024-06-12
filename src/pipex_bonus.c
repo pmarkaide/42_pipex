@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/11 21:21:39 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:33:56 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,74 +21,6 @@ int	get_exit_code(int status)
 		exit_code = 128 + WTERMSIG(status);
 	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
 		exit_code = WEXITSTATUS(status);
-	return (exit_code);
-}
-
-int	pipex(t_data *data, char **envp)
-{
-	pid_t	pid[2];
-	int		status1;
-	int		status2;
-
-	if (pipe(data->pipe_fd) == -1)
-		return (error_msg("pipe failed"));
-	pid[0] = fork();
-	if (pid[0] == -1)
-		return (error_msg("fork failed"));
-	if (pid[0] == 0)
-	{
-		execute_child1(data, envp);
-		ft_putstr_fd("Child1 executed\n",2);
-	}
-	pid[1] = fork();
-	if (pid[1] == -1)
-	{
-		waitpid(pid[0], &status1, 0);
-		return (error_msg("fork failed"));
-	}
-	if (pid[1] == 0)
-		execute_child2(data, envp);
-	close_pipes(data);
-	waitpid(pid[0], &status1, 0);
-	waitpid(pid[1], &status2, 0);
-	return (get_exit_code(status2));
-}
-
-int	pipex(t_data *data, char **envp)
-{
-	int cmd;
-	int	exit_code;
-	int	read_end;
-	pid_t	pid[2];
-
-	cmd = 0;
-	exit_code = 0;
-	read_end = 0;
-	while(cmd < data->num_cmd -1)
-	{
-		pipe(data->pipe_fd);
-		pid[0] = fork();
-		if (pid[0] == -1)
-			return (error_msg("fork failed"));
-		if (pid[0] == 0)
-		{
-			dup_file_descriptors(data, cmd, read_end);
-			cmd_is_directory(data);
-			eval_executable(data);
-			exit_code = execute_cmd(data, envp);
-			exit(exit_code);
-		}
-		else
-		{
-			waitpid(pid[0], &exit_code, 0);
-			close(data->pipe_fd[1]);
-			if (read_end != data->in_fd)
-				close(read_end);
-			read_end = data->pipe_fd[0];
-		}
-	}
-	close(read_end);
-	close_pipes(data);
 	return (exit_code);
 }
 
@@ -125,6 +57,46 @@ void dup_file_descriptors(t_data *data, int cmd, int read_end)
 		close(data->pipe_fd[1]);
 	}
 }
+
+int	pipex(t_data *data, char **envp)
+{
+	int cmd;
+	int	exit_code;
+	int	read_end;
+	pid_t	pid[2];
+
+	cmd = 0;
+	exit_code = 0;
+	read_end = 0;
+	while(cmd < data->num_cmd -1)
+	{
+		pipe(data->pipe_fd);
+		pid[0] = fork();
+		if (pid[0] == -1)
+			return (error_msg("fork failed"));
+		if (pid[0] == 0)
+		{
+			dup_file_descriptors(data, cmd, read_end);
+			cmd_is_directory(data);
+			eval_executable(data);
+			exit_code = execute_cmd(data, envp);
+			exit(exit_code);
+		}
+		else
+		{
+			waitpid(pid[0], &exit_code, 0);
+			close(data->pipe_fd[1]);
+			if (read_end != data->in_fd)
+				close(read_end);
+			read_end = data->pipe_fd[0];
+		}
+	}
+	close(read_end);
+	close_open_fds(data);
+	return (exit_code);
+}
+
+
 
 
 

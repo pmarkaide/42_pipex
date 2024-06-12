@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 15:28:31 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:18:44 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	get_executable_path(t_data *data)
 	i = 0;
 	while (data->paths[i])
 	{
-		exec_path = ft_stnum_cmdrjoin(data->paths[i], data->cmd[0], "/");
+		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
 		if (!access(exec_path, F_OK))
 		{
 			free(data->exec_path);
@@ -85,7 +85,7 @@ char	*parse_shell(char **envp)
 
 void	init_struct(t_data *data, int argc, char **argv, char **envp)
 {
-	memset(data->pipe_fd, 0, sizeof(data->pipe_fd));
+	ft_memset(data->pipe_fd, 0, sizeof(data->pipe_fd));
 	data->infile = argv[1];
 	data->outfile = argv[4];
 	data->num_cmd = argc - 3;
@@ -116,7 +116,7 @@ void open_outfile(t_data *data)
 	if (errno == ENOENT)
 		free_data_and_exit(data, data->outfile, NO_FILE);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);	if (errno == IS_DIRECTORY)
+		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);
 	if (errno == IS_DIRECTORY)
 		free_data_and_exit(data, data->infile, IS_DIRECTORY);
 }

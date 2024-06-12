@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/11 21:22:45 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:33:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	free_data(t_data *data)
 {
 	if (data == NULL)
 		return ;
-	close_pipes(data);
+	close_open_fds(data);
 	free_array(data->cmd1);
 	free_array(data->cmd2);
 	free_array(data->paths);
