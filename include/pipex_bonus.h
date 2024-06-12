@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 11:44:30 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:40:01 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_data
 	int 	num_cmds;
 	char	***cmds;
 	char	*exec_path;
-	char	**cmd;
 	char	**paths;
 	char	*shell;
 }			t_data;
@@ -48,14 +47,12 @@ void		init_struct(t_data *data, int argc, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);
 int			pipex(t_data *data, char **envp);
-int			execute_cmd(t_data *data, char **envp);
+int			execute_cmd(t_data *data, char **cmd, char **envp);
 void		eval_executable(t_data *data);
 void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
 void		cmd_is_directory(t_data *data);
 char		**clean_arguments(char *arg);
-int			execute_child1(t_data *data, char **envp);
-void		execute_child2(t_data *data, char **envp);
 char		*allocate_result(const char *arg);
 char		*remove_str_quotes(char *arg);
 int			error_msg(char *msg);

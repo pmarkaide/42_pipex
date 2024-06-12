@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:17 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 13:23:07 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:41:38 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 	int		exit_code;
 
-	if (argc != 5)
-		ft_putstr_fd("Usage: ./pipex infile cmd1 cmd2 outfile", 2);
 	init_struct(&data, argc, argv, envp);
 	exit_code = pipex(&data, envp);
 	free_data(&data);
