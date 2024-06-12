@@ -6,11 +6,20 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 12:42:49 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:01:37 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
+
+void free_string(char **str)
+{
+    if (str != NULL && *str != NULL)
+    {
+        free(*str);
+        *str = NULL;
+    }
+}
 
 void	free_array(char **array)
 {
@@ -52,14 +61,18 @@ void	free_data(t_data *data)
 	while(i < data->num_cmds)
 	{
 		if (data->cmds[i] != NULL)
+		{
 			free_array(data->cmds[i]);
+			data->cmds[i] = NULL;
+		}
 		i++;
 	}
-	free_array(data->paths);
-	if (data->exec_path)
-		free(data->exec_path);
-	if (data->shell)
-		free(data->shell);
+    data->cmds = NULL;
+    free_array(data->paths);
+    data->paths = NULL;
+    free_string(&data->exec_path);
+    free_string(data->cmd);
+    free_string(&data->shell);
 }
 
 void	free_data_and_exit(t_data *data, char *file, int exit_code)
