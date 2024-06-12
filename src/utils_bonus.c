@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 10:18:44 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:49:29 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,27 @@ char	*parse_shell(char **envp)
 
 void	init_struct(t_data *data, int argc, char **argv, char **envp)
 {
-	ft_memset(data->pipe_fd, 0, sizeof(data->pipe_fd));
+	int i;
+
+	i = 0;
+	ft_memset(data->pipe_fd, -1, sizeof(data->pipe_fd));
 	data->infile = argv[1];
-	data->outfile = argv[4];
-	data->num_cmd = argc - 3;
-	data->cmd1 = clean_arguments(argv[2]);
-	data->cmd2 = clean_arguments(argv[3]);
+	data->outfile = argv[argc - 1];
+	data->num_cmds = argc - 3;
+	data->cmds = malloc(sizeof(char **) * data->num_cmds);
+	if (data->cmds == NULL)
+		free_data_and_exit(data, "malloc error", -1);
+	while (i < data->num_cmds)
+	{
+		data->cmds[i] = clean_arguments(argv[i + 2]);
+		if (data->cmds[i] == NULL)
+			free_data_and_exit(data, "malloc error", -1);
+		i++;
+	}
 	data->exec_path = NULL;
 	data->cmd = NULL;
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
-	if (data->cmd1 == NULL || data->cmd2 == NULL)
-		free_data_and_exit(data, "malloc error", -1);
 }
 
 void open_infile(t_data *data)

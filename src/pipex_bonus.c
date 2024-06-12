@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 10:33:56 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:46:45 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void dup_file_descriptors(t_data *data, int cmd, int read_end)
 			free_data_and_exit(data, "dup2 error", -1);
 		close(data->pipe_fd[1]);
 	}
-	else if(cmd == data->num_cmd -1)
+	else if(cmd == data->num_cmds -1)
 	{
 		open_outfile(data);
 		if(dup2(read_end, STDIN_FILENO) < 0)
@@ -60,15 +60,15 @@ void dup_file_descriptors(t_data *data, int cmd, int read_end)
 
 int	pipex(t_data *data, char **envp)
 {
-	int cmd;
+	int i;
 	int	exit_code;
 	int	read_end;
 	pid_t	pid[2];
 
-	cmd = 0;
+	i = 0;
 	exit_code = 0;
 	read_end = 0;
-	while(cmd < data->num_cmd -1)
+	while(i < data->num_cmds -1)
 	{
 		pipe(data->pipe_fd);
 		pid[0] = fork();
@@ -76,7 +76,8 @@ int	pipex(t_data *data, char **envp)
 			return (error_msg("fork failed"));
 		if (pid[0] == 0)
 		{
-			dup_file_descriptors(data, cmd, read_end);
+			dup_file_descriptors(data, i, read_end);
+			data->cmd = data->cmds[i];
 			cmd_is_directory(data);
 			eval_executable(data);
 			exit_code = execute_cmd(data, envp);
@@ -86,10 +87,11 @@ int	pipex(t_data *data, char **envp)
 		{
 			waitpid(pid[0], &exit_code, 0);
 			close(data->pipe_fd[1]);
-			if (read_end != data->in_fd)
+			if (read_end != 0)
 				close(read_end);
 			read_end = data->pipe_fd[0];
 		}
+		i++;
 	}
 	close(read_end);
 	close_open_fds(data);

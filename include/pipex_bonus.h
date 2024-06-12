@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 10:33:31 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:44:30 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ typedef struct s_data
 	char	*outfile;
 	int		in_fd;
 	int		out_fd;
-	int 	num_cmd;
-	char	**cmd1;
-	char	**cmd2;
+	int 	num_cmds;
+	char	***cmds;
 	char	*exec_path;
 	char	**cmd;
 	char	**paths;

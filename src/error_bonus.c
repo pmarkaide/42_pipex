@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 10:33:16 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:42:49 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,18 @@ void close_open_fds(t_data *data)
 
 void	free_data(t_data *data)
 {
+	int i;
+
+	i = 0;
 	if (data == NULL)
 		return ;
 	close_open_fds(data);
-	free_array(data->cmd1);
-	free_array(data->cmd2);
+	while(i < data->num_cmds)
+	{
+		if (data->cmds[i] != NULL)
+			free_array(data->cmds[i]);
+		i++;
+	}
 	free_array(data->paths);
 	if (data->exec_path)
 		free(data->exec_path);
