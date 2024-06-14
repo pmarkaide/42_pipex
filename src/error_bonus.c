@@ -6,19 +6,19 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 12:02:06 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:24:07 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-void free_string(char **str)
+void	free_string(char **str)
 {
-    if (str != NULL && *str != NULL)
-    {
-        free(*str);
-        *str = NULL;
-    }
+	if (str != NULL && *str != NULL)
+	{
+		free(*str);
+		*str = NULL;
+	}
 }
 
 void	free_array(char **array)
@@ -37,28 +37,15 @@ void	free_array(char **array)
 	free(array);
 }
 
-void close_open_fds(t_data *data)
-{
-	if (data->pipe_fd[0] != -1)
-		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != -1)
-		close(data->pipe_fd[1]);
-	if(data->in_fd != -1)
-		close(data->in_fd);
-	if(data->out_fd != -1)
-		close(data->out_fd);
-}
-
-
 void	free_data(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (data == NULL)
 		return ;
 	close_open_fds(data);
-	while(i < data->num_cmds)
+	while (i < data->num_cmds)
 	{
 		if (data->cmds[i] != NULL)
 		{
@@ -68,11 +55,10 @@ void	free_data(t_data *data)
 		i++;
 	}
 	free(data->cmds);
-    data->cmds = NULL;
-    free_array(data->paths);
-    data->paths = NULL;
-    free_string(&data->exec_path);
-    free_string(&data->shell);
+	free(data->pid);
+	free_array(data->paths);
+	free_string(&data->exec_path);
+	free_string(&data->shell);
 }
 
 void	free_data_and_exit(t_data *data, char *file, int exit_code)
@@ -100,9 +86,9 @@ void	free_data_and_exit(t_data *data, char *file, int exit_code)
 	exit(exit_code);
 }
 
-int	error_msg(char *msg)
+int	error_msg(char *msg, int exit_code)
 {
 	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(msg, 2);
-	return (-1);
+	return (exit_code);
 }

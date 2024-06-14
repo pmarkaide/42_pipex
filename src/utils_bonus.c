@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 11:52:12 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:52:57 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,20 +61,14 @@ char	*parse_shell(char **envp)
 	return (shell);
 }
 
-void	init_struct(t_data *data, int argc, char **argv, char **envp)
+void	init_cmds_and_pid(t_data *data, char **argv)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	data->pipe_fd[0] = -1;
-    data->pipe_fd[1] = -1;
-    data->in_fd = -1;
-    data->out_fd = -1;
-	data->infile = argv[1];
-	data->outfile = argv[argc - 1];
-	data->num_cmds = argc - 3;
-	data->cmds = malloc(sizeof(char **) * data->num_cmds);
-	if (data->cmds == NULL)
+	data->pid = malloc(sizeof(pid_t) * data->num_cmds);
+	data->cmds = malloc(sizeof(char **) * (data->num_cmds + 1));
+	if (data->cmds == NULL || data->pid == NULL)
 		free_data_and_exit(data, "malloc error", -1);
 	while (i < data->num_cmds)
 	{
@@ -83,29 +77,21 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 			free_data_and_exit(data, "malloc error", -1);
 		i++;
 	}
+	data->cmds[i] = NULL;
+}
+
+void	init_struct(t_data *data, int argc, char **argv, char **envp)
+{
+	data->pipe_fd[0] = -1;
+	data->pipe_fd[1] = -1;
+	data->in_fd = -1;
+	data->out_fd = -1;
+	data->infile = argv[1];
+	data->outfile = argv[argc - 1];
+	data->num_cmds = argc - 3;
+	init_cmds_and_pid(data, argv);
 	data->exec_path = NULL;
+	data->envp = envp;
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
-}
-
-void open_infile(t_data *data)
-{
-	data->in_fd = open(data->infile, O_RDONLY);
-	if (errno == ENOENT)
-		free_data_and_exit(data, data->infile, NO_FILE);
-	if (errno == EACCES)
-		free_data_and_exit(data, data->infile, PERMISSION_DENIED);
-	if (errno == IS_DIRECTORY)
-		free_data_and_exit(data, data->infile, IS_DIRECTORY);
-}
-
-void open_outfile(t_data *data)
-{
-	data->out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (errno == ENOENT)
-		free_data_and_exit(data, data->outfile, NO_FILE);
-	if (errno == EACCES)
-		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);
-	if (errno == IS_DIRECTORY)
-		free_data_and_exit(data, data->infile, IS_DIRECTORY);
 }

@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 11:59:57 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:11:23 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,6 @@ void	eval_executable(t_data *data, char *cmd)
 		get_executable_path(data, cmd);
 }
 
-int	execute_cmd(t_data *data, char **cmd, char **envp)
-{
-	int	exit_code;
-
-	exit_code = 0;
-
-	if (execve(data->exec_path, cmd, envp) == -1)
-	{
-		free_data(data);
-		return (EXIT_FAILURE);
-	}
-	return (exit_code);
-}
-
 void	get_executable_path(t_data *data, char *cmd)
 {
 	int		i;
@@ -88,10 +74,23 @@ void	get_executable_path(t_data *data, char *cmd)
 			free(data->exec_path);
 			data->exec_path = exec_path;
 			eval_executable_permissions(data);
-			return;
+			return ;
 		}
 		free(exec_path);
 		i++;
 	}
 	free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
+}
+
+void	execute_child_process(t_data *data, int i, int read_end)
+{
+	dup_file_descriptors(data, i, read_end);
+	cmd_is_directory(data, data->cmds[i][0]);
+	eval_executable(data, data->cmds[i][0]);
+	if (execve(data->exec_path, data->cmds[i], data->envp) == -1)
+	{
+		free_data(data);
+		exit(EXIT_FAILURE);
+	}
+	exit(0);
 }
