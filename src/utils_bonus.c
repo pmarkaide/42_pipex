@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 12:49:29 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 11:52:12 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,6 @@ char	*allocate_result(const char *arg)
 		return (ft_strdup(arg));
 	res = (char *)malloc((len + 1) * sizeof(char));
 	return (res);
-}
-
-void	get_executable_path(t_data *data)
-{
-	int		i;
-	char	*exec_path;
-
-	exec_path = data->cmd[0];
-	i = 0;
-	while (data->paths[i])
-	{
-		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
-		if (!access(exec_path, F_OK))
-		{
-			free(data->exec_path);
-			data->exec_path = exec_path;
-			return (eval_executable_permissions(data));
-		}
-		free(exec_path);
-		i++;
-	}
-	free_data_and_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
 }
 
 char	**parse_paths(char **envp)
@@ -88,7 +66,10 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 	int i;
 
 	i = 0;
-	ft_memset(data->pipe_fd, -1, sizeof(data->pipe_fd));
+	data->pipe_fd[0] = -1;
+    data->pipe_fd[1] = -1;
+    data->in_fd = -1;
+    data->out_fd = -1;
 	data->infile = argv[1];
 	data->outfile = argv[argc - 1];
 	data->num_cmds = argc - 3;
@@ -103,7 +84,6 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 		i++;
 	}
 	data->exec_path = NULL;
-	data->cmd = NULL;
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
 }

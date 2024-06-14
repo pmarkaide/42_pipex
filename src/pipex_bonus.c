@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/12 15:37:06 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:19:35 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void dup_file_descriptors(t_data *data, int cmd, int read_end)
 			free_data_and_exit(data, "dup2 error", -1);
 		close(data->pipe_fd[1]);
 	}
-	else if(cmd == data->num_cmds)
+	else if(cmd == data->num_cmds - 1)
 	{
 		open_outfile(data);
 		if(dup2(read_end, STDIN_FILENO) < 0)
@@ -71,14 +71,15 @@ int	pipex(t_data *data, char **envp)
 	while(i < data->num_cmds)
 	{
 		pipe(data->pipe_fd);
+		// TODO: pipe error
 		pid[0] = fork();
 		if (pid[0] == -1)
 			return (error_msg("fork failed"));
 		if (pid[0] == 0)
 		{
 			dup_file_descriptors(data, i, read_end);
-			cmd_is_directory(data);
-			eval_executable(data);
+			cmd_is_directory(data, data->cmds[i][0]);
+			eval_executable(data, data->cmds[i][0]);
 			exit_code = execute_cmd(data, data->cmds[i], envp);
 			exit(exit_code);
 		}

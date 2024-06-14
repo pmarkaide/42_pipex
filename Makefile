@@ -6,7 +6,7 @@
 #    By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/18 13:04:46 by pmarkaid          #+#    #+#              #
-#    Updated: 2024/06/12 10:35:25 by pmarkaid         ###   ########.fr        #
+#    Updated: 2024/06/14 12:24:33 by pmarkaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,13 +27,13 @@ SRCS = $(addprefix $(SRC_DIR), $(SRCS_FILES))
 
 BONUS_FILES = \
 	clean_str.c \
-	exec_utils.c \
 	parse_args.c \
 	error_bonus.c \
 	exec_bonus.c \
 	main_bonus.c \
 	pipex_bonus.c \
 	utils_bonus.c
+
 SRCS_BONUS = $(addprefix $(SRC_DIR), $(BONUS_FILES))
 
 LIBFT_DIR = lib/libft/
