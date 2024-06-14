@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:35 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 12:54:44 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:52:18 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	cmd_is_directory(t_data *data)
 	fd = open(data->cmd[0], O_RDONLY | O_DIRECTORY);
 	if (fd != -1)
 	{
-		free_data_and_exit(data, data->cmd[0], IS_DIRECTORY);
 		close(fd);
+		free_data_and_exit(data, data->cmd[0], IS_DIRECTORY);
 	}
 }
 
