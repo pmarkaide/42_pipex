@@ -6,7 +6,7 @@
 #    By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/18 13:04:46 by pmarkaid          #+#    #+#              #
-#    Updated: 2024/06/14 15:02:51 by pmarkaid         ###   ########.fr        #
+#    Updated: 2024/06/14 18:08:30 by pmarkaid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ BONUS_FILES = \
 
 SRCS_BONUS = $(addprefix $(SRC_DIR), $(BONUS_FILES))
 
+INCLUDE = -I ./include/
+
 LIBFT_DIR = lib/libft/
 LIBFT = $(LIBFT_DIR)libft.a
 LIBFT_INCLUDE = -I $(LIBFT_DIR)
@@ -66,12 +68,11 @@ $(NAME): $(OBJS) $(LIBFT)
 
 clean:
 	make -C $(LIBFT_DIR) clean
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
 	rm -f $(NAME)
 	rm -f $(LIBFT)
-
 
 re: fclean all
 

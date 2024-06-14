@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 16:42:21 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:59:25 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ int	pipex(t_data *data)
 	exit_code = wait_processes(data->pid, num_cmds_executed);
 	close(read_end);
 	close_open_fds(data);
-	return (get_exit_code(exit_code));
+	return (exit_code);
 }
