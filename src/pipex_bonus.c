@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 12:19:35 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:38:20 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,32 @@
 
 int	get_exit_code(int status)
 {
-	int	exit_code;
+    int	exit_code;
 
+    exit_code = 0;
+    if (WIFSIGNALED(status))
+        exit_code = 128 + WTERMSIG(status);
+    else if (WIFEXITED(status))
+        exit_code = WEXITSTATUS(status);
+    return (exit_code);
+}
+
+int	wait_processes(pid_t *pid, int cmds)
+{
+    int	i;
+    int	status;
+    int exit_code;
+
+    i = 0;
 	exit_code = 0;
-	if (WIFSIGNALED(status) && WTERMSIG(status))
-		exit_code = 128 + WTERMSIG(status);
-	else if (WIFEXITED(status) && WEXITSTATUS(status) != EXIT_SUCCESS)
-		exit_code = WEXITSTATUS(status);
-	return (exit_code);
+    while (i < cmds)
+    {
+		waitpid(pid[i], &status, 0);
+        if (i == cmds - 1)
+            exit_code = get_exit_code(status);
+        i++;
+    }
+    return exit_code;
 }
 
 //TODO: create a dup2 oneliner: execute > eval > exit
@@ -63,8 +81,11 @@ int	pipex(t_data *data, char **envp)
 	int i;
 	int	exit_code;
 	int	read_end;
-	pid_t	pid[2];
+	pid_t	*pid;
 
+	pid = malloc(sizeof(pid_t) * data->num_cmds);
+	if (!pid)
+		return (error_msg("malloc failed"));
 	i = 0;
 	exit_code = 0;
 	read_end = 0;
@@ -72,10 +93,10 @@ int	pipex(t_data *data, char **envp)
 	{
 		pipe(data->pipe_fd);
 		// TODO: pipe error
-		pid[0] = fork();
-		if (pid[0] == -1)
+		pid[i] = fork();
+		if (pid[i] == -1)
 			return (error_msg("fork failed"));
-		if (pid[0] == 0)
+		if (pid[i] == 0)
 		{
 			dup_file_descriptors(data, i, read_end);
 			cmd_is_directory(data, data->cmds[i][0]);
@@ -85,7 +106,6 @@ int	pipex(t_data *data, char **envp)
 		}
 		else
 		{
-			waitpid(pid[0], &exit_code, 0);
 			close(data->pipe_fd[1]);
 			if (read_end != 0)
 				close(read_end);
@@ -93,9 +113,11 @@ int	pipex(t_data *data, char **envp)
 		}
 		i++;
 	}
+	exit_code = wait_processes(pid, data->num_cmds);
+    free(pid);
 	close(read_end);
 	close_open_fds(data);
-	return (exit_code);
+	return (get_exit_code(exit_code));
 }
 
 
