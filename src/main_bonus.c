@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:17 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 14:50:04 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:57:18 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	data;
+	t_data	data = {0};
 	int		exit_code;
 
 	if (argc < 5)

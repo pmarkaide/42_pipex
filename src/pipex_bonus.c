@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 17:59:25 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:37:00 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,35 @@ int	execute_cmds(t_data *data, int read_end)
 	if (read_end > 0)
 		close(read_end);
 	return (i);
+}
+
+void	here_doc(t_data *data)
+{
+	int		fd;
+	char	*line;
+	char    *delimiter_with_newline;
+
+	fd = open("/tmp/here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		free_data_and_exit(data, "here_doc file opening failed", -1);
+	delimiter_with_newline = ft_strjoin(data->delimiter, "\n", NULL);
+	if (!delimiter_with_newline)
+		free_data_and_exit(data, "Memory allocation failed", -1);
+	while (1)
+	{
+		line = get_next_line(0);
+		if(!line)
+			free_data_and_exit(data, "here_doc file reading failed", -1);
+		if (ft_strcmp(line, delimiter_with_newline) == 0)
+		{
+			free(line);
+			free(delimiter_with_newline);
+			break;
+		}
+		ft_putstr_fd(line, fd);
+		free(line);
+	}
+	close(fd);
 }
 
 int	pipex(t_data *data)

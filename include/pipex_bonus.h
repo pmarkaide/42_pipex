@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 17:11:49 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:48:10 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_data
 	int		pipe_fd[2];
 	char	*infile;
 	char	*outfile;
+	int		here_doc;
+	char	*delimiter;
 	int		in_fd;
 	int		out_fd;
 	int		num_cmds;
@@ -60,5 +62,6 @@ int			error_msg(char *msg, int exit_code);
 void		close_open_fds(t_data *data);
 void		open_infile(t_data *data);
 void		open_outfile(t_data *data);
+void		here_doc(t_data *data);
 
 #endif /* PIPEX_BONUS_H */
