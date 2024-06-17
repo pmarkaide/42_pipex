@@ -74,7 +74,7 @@ void	here_doc(t_data *data)
 {
 	int		fd;
 	char	*line;
-	char    *delimiter_with_newline;
+	char	*delimiter_with_newline;
 
 	fd = open("/tmp/here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
@@ -85,13 +85,13 @@ void	here_doc(t_data *data)
 	while (1)
 	{
 		line = get_next_line(0);
-		if(!line)
+		if (!line)
 			free_data_and_exit(data, "here_doc file reading failed", -1);
 		if (ft_strcmp(line, delimiter_with_newline) == 0)
 		{
 			free(line);
 			free(delimiter_with_newline);
-			break;
+			break ;
 		}
 		ft_putstr_fd(line, fd);
 		free(line);

@@ -64,7 +64,7 @@ char	*parse_shell(char **envp)
 void	init_cmds_and_pid(t_data *data, char **argv)
 {
 	int	i;
-	int offset;
+	int	offset;
 
 	i = 0;
 	data->pid = malloc(sizeof(pid_t) * data->num_cmds);
@@ -91,20 +91,20 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 	data->pipe_fd[1] = -1;
 	data->in_fd = -1;
 	data->out_fd = -1;
-	if(ft_strncmp(argv[1], "here_doc", 8) == 0)
-    {
-        data->here_doc = 1;
-        data->delimiter = argv[2];
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	{
+		data->here_doc = 1;
+		data->delimiter = argv[2];
 		data->infile = "/tmp/here_doc";
 		data->num_cmds = argc - 4;
-    }
-    else
-    {
-        data->here_doc = 0;
+	}
+	else
+	{
+		data->here_doc = 0;
 		data->delimiter = NULL;
-        data->infile = argv[1];
+		data->infile = argv[1];
 		data->num_cmds = argc - 3;
-    }
+	}
 	data->outfile = argv[argc - 1];
 	data->exec_path = NULL;
 	data->envp = envp;

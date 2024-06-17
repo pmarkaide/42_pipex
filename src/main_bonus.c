@@ -14,9 +14,10 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	data = {0};
+	t_data	data;
 	int		exit_code;
 
+	data = {0};
 	if (argc < 5)
 	{
 		ft_putstr_fd("Error: I need at least 5 arguments\n", 2);

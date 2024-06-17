@@ -14,7 +14,7 @@
 
 void	open_infile(t_data *data)
 {
-	if(data->here_doc == 1)
+	if (data->here_doc == 1)
 		here_doc(data);
 	data->in_fd = open(data->infile, O_RDONLY);
 	if (errno == ENOENT)
@@ -27,7 +27,7 @@ void	open_infile(t_data *data)
 
 void	open_outfile(t_data *data)
 {
-	if(data->here_doc == 1)
+	if (data->here_doc == 1)
 		data->out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		data->out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
