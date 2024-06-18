@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 12:23:25 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:07 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_data
 	char	*outfile;
 	char	**cmd1;
 	char	**cmd2;
-	char	*exec_path;
+	char	*executable;
 	char	**cmd;
 	char	**paths;
 	char	*shell;
@@ -50,7 +50,7 @@ int			execute_cmd(t_data *data, char **envp);
 void		eval_executable(t_data *data);
 void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
-void		cmd_is_directory(t_data *data);
+int			cmd_is_directory(t_data *data);
 char		**clean_arguments(char *arg);
 int			execute_child1(t_data *data, char **envp);
 void		execute_child2(t_data *data, char **envp);

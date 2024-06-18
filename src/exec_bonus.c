@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 15:11:23 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	eval_executable_permissions(t_data *data)
 {
-	if (!access(data->exec_path, X_OK))
+	if (!access(data->executable, X_OK))
 		return ;
-	free_data_and_exit(data, data->exec_path, PERMISSION_DENIED);
+	free_data_and_exit(data, data->executable, PERMISSION_DENIED);
 }
 
-void	cmd_is_directory(t_data *data, char *cmd)
+int	cmd_is_directory(char *cmd)
 {
 	int	fd;
 
@@ -27,22 +27,21 @@ void	cmd_is_directory(t_data *data, char *cmd)
 	if (fd != -1)
 	{
 		close(fd);
-		free_data_and_exit(data, cmd, IS_DIRECTORY);
+		return(1);
 	}
+	return(0);
 }
 
 void	eval_executable(t_data *data, char *cmd)
 {
 	int		local;
-	char	*exec_path;
 
 	local = 0;
-	exec_path = ft_strdup(cmd);
-	if (exec_path == NULL)
+	data->executable = cmd;
+	if (data->executable == NULL)
 		free_data_and_exit(data, "malloc error", -1);
-	data->exec_path = exec_path;
-	if (ft_str_empty(data->exec_path))
-		free_data_and_exit(data, data->exec_path, COMMAND_NOT_FOUND);
+	if (ft_str_empty(data->executable))
+		free_data_and_exit(data, data->executable, COMMAND_NOT_FOUND);
 	if (ft_strncmp(cmd, "/", 1) == 0)
 		local = 1;
 	if (ft_strncmp(cmd, "./", 2) == 0)
@@ -51,32 +50,34 @@ void	eval_executable(t_data *data, char *cmd)
 		local = 1;
 	if (local || data->paths == NULL)
 	{
-		if (!access(data->exec_path, F_OK))
-			eval_executable_permissions(data);
-		else
-			free_data_and_exit(data, data->exec_path, EXEC_NOT_FOUND);
+		if (!access(data->executable, F_OK))
+		{
+			if(cmd_is_directory(cmd))
+				free_data_and_exit(data, cmd, IS_DIRECTORY);
+			return (eval_executable_permissions(data));
+		}
+			free_data_and_exit(data, data->executable, EXEC_NOT_FOUND);
 	}
-	else
 		get_executable_path(data, cmd);
 }
 
 void	get_executable_path(t_data *data, char *cmd)
 {
 	int		i;
-	char	*exec_path;
+	char	*executable;
 
 	i = 0;
 	while (data->paths[i])
 	{
-		exec_path = ft_strjoin(data->paths[i], cmd, "/");
-		if (!access(exec_path, F_OK))
+		executable = ft_strjoin(data->paths[i], cmd, "/");
+		if (!access(executable, F_OK))
 		{
-			free(data->exec_path);
-			data->exec_path = exec_path;
+			free(data->executable);
+			data->executable = executable;
 			eval_executable_permissions(data);
 			return ;
 		}
-		free(exec_path);
+		free(executable);
 		i++;
 	}
 	free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
@@ -85,9 +86,8 @@ void	get_executable_path(t_data *data, char *cmd)
 void	execute_child_process(t_data *data, int i, int read_end)
 {
 	dup_file_descriptors(data, i, read_end);
-	cmd_is_directory(data, data->cmds[i][0]);
 	eval_executable(data, data->cmds[i][0]);
-	if (execve(data->exec_path, data->cmds[i], data->envp) == -1)
+	if (execve(data->executable, data->cmds[i], data->envp) == -1)
 	{
 		free_data(data);
 		exit(EXIT_FAILURE);

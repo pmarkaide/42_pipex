@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/17 15:47:02 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 		data->num_cmds = argc - 3;
 	}
 	data->outfile = argv[argc - 1];
-	data->exec_path = NULL;
+	data->executable = NULL;
 	data->envp = envp;
 	data->shell = parse_shell(envp);
 	data->paths = parse_paths(envp);

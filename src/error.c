@@ -6,26 +6,36 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 14:36:30 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:00:22 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	free_array(char **array)
+void	free_string(char **str)
+{
+	if (str != NULL && *str != NULL)
+	{
+		free(*str);
+		*str = NULL;
+	}
+}
+
+void	free_array(char ***array)
 {
 	size_t	i;
 
-	i = 0;
-	if (array == NULL || *array == NULL)
+	if (*array == NULL || **array == NULL)
 		return ;
-	while (array[i] != NULL)
+	i = 0;
+	while ((*array)[i] != NULL)
 	{
-		free(array[i]);
-		array[i] = NULL;
+		free((*array)[i]);
+		(*array)[i] = NULL;
 		i++;
 	}
-	free(array);
+	free(*array);
+	*array = NULL;
 }
 
 void	close_pipes(t_data *data)
@@ -41,13 +51,10 @@ void	free_data(t_data *data)
 	if (data == NULL)
 		return ;
 	close_pipes(data);
-	free_array(data->cmd1);
-	free_array(data->cmd2);
-	free_array(data->paths);
-	if (data->exec_path)
-		free(data->exec_path);
-	if (data->shell)
-		free(data->shell);
+	free_array(&data->cmd1);
+	free_array(&data->cmd2);
+	free_array(&data->paths);
+	free_string(&data->shell);
 }
 
 void	free_data_and_exit(t_data *data, char *file, int exit_code)

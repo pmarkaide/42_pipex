@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/14 17:24:07 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_data(t_data *data)
 	free(data->cmds);
 	free(data->pid);
 	free_array(data->paths);
-	free_string(&data->exec_path);
+	free_string(&data->executable);
 	free_string(&data->shell);
 }
 

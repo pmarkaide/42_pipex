@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/06 14:32:19 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:33:41 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,18 @@ char	*allocate_result(const char *arg)
 void	get_executable_path(t_data *data)
 {
 	int		i;
-	char	*exec_path;
+	char	*executable;
 
-	exec_path = data->cmd[0];
 	i = 0;
 	while (data->paths[i])
 	{
-		exec_path = ft_strjoin(data->paths[i], data->cmd[0], "/");
-		if (!access(exec_path, F_OK))
+		executable = ft_strjoin(data->paths[i], data->cmd[0], "/");
+		if (!access(executable, F_OK))
 		{
-			free(data->exec_path);
-			data->exec_path = exec_path;
+			data->executable = executable;
 			return (eval_executable_permissions(data));
 		}
-		free(exec_path);
+		free(executable);
 		i++;
 	}
 	free_data_and_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
@@ -91,7 +89,7 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->pipe_fd[1] = -1;
 	data->cmd1 = clean_arguments(argv[2]);
 	data->cmd2 = clean_arguments(argv[3]);
-	data->exec_path = NULL;
+	data->executable = NULL;
 	data->cmd = NULL;
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);

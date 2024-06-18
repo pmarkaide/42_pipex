@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:46 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/10 15:06:39 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:07 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	execute_cmd(t_data *data, char **envp)
 {
 	int	exit_code;
 
-	if (execve(data->exec_path, data->cmd, envp) == -1)
+	if (execve(data->executable, data->cmd, envp) == -1)
 	{
 		exit_code = execute_shell_cmd(data, envp);
 		return (exit_code);
@@ -59,7 +59,6 @@ int	execute_child1(t_data *data, char **envp)
 		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
-	cmd_is_directory(data);
 	eval_executable(data);
 	exit_code = execute_cmd(data, envp);
 	return (exit_code);
@@ -82,7 +81,6 @@ void	execute_child2(t_data *data, char **envp)
 		free_data_and_exit(data, "dup2 error", -1);
 	close(out_fd);
 	data->cmd = data->cmd2;
-	cmd_is_directory(data);
 	eval_executable(data);
 	execute_cmd(data, envp);
 }

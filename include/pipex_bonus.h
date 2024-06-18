@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/17 15:48:10 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_data
 	int		num_cmds;
 	pid_t	*pid;
 	char	***cmds;
-	char	*exec_path;
+	char	*executable;
 	char	**envp;
 	char	**paths;
 	char	*shell;
@@ -54,7 +54,7 @@ void		dup_file_descriptors(t_data *data, int cmd, int read_end);
 void		execute_child_process(t_data *data, int i, int read_end);
 void		get_executable_path(t_data *data, char *cmd);
 void		eval_executable(t_data *data, char *cmd);
-void		cmd_is_directory(t_data *data, char *cmd);
+int		cmd_is_directory(char *cmd);
 char		**clean_arguments(char *arg);
 char		*allocate_result(const char *arg);
 char		*remove_str_quotes(char *arg);
