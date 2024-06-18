@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:39:37 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,21 @@ void	free_string(char **str)
 	}
 }
 
-void	free_array(char **array)
+void	free_array(char ***array)
 {
 	size_t	i;
 
-	i = 0;
-	if (array == NULL || *array == NULL)
+	if (*array == NULL || **array == NULL)
 		return ;
-	while (array[i] != NULL)
+	i = 0;
+	while ((*array)[i] != NULL)
 	{
-		free(array[i]);
-		array[i] = NULL;
+		free((*array)[i]);
+		(*array)[i] = NULL;
 		i++;
 	}
-	free(array);
+	free(*array);
+	*array = NULL;
 }
 
 void	free_data(t_data *data)
@@ -49,15 +50,16 @@ void	free_data(t_data *data)
 	{
 		if (data->cmds[i] != NULL)
 		{
-			free_array(data->cmds[i]);
+			free_array(&data->cmds[i]);
 			data->cmds[i] = NULL;
 		}
 		i++;
 	}
 	free(data->cmds);
+	data->cmds = NULL;
 	free(data->pid);
-	free_array(data->paths);
-	free_string(&data->executable);
+	data->pid = NULL;
+	free_array(&data->paths);
 	free_string(&data->shell);
 }
 

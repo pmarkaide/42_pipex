@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 10:27:16 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:36:59 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	get_executable_path(t_data *data, char *cmd)
 		executable = ft_strjoin(data->paths[i], cmd, "/");
 		if (!access(executable, F_OK))
 		{
-			free(data->executable);
 			data->executable = executable;
 			eval_executable_permissions(data);
 			return ;
