@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 10:27:07 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:53:00 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			execute_cmd(t_data *data, char **envp);
 void		eval_executable(t_data *data);
 void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
-int			cmd_is_directory(t_data *data);
+int			cmd_is_directory(char *cmd);
 char		**clean_arguments(char *arg);
 int			execute_child1(t_data *data, char **envp);
 void		execute_child2(t_data *data, char **envp);

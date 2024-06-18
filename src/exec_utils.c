@@ -6,17 +6,17 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:35 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 10:27:07 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:52:26 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int	cmd_is_directory(t_data *data)
+int	cmd_is_directory(char *cmd)
 {
 	int	fd;
 
-	fd = open(data->cmd[0], O_RDONLY | O_DIRECTORY);
+	fd = open(cmd, O_RDONLY | O_DIRECTORY);
 	if (fd != -1)
 	{
 		close(fd);
@@ -45,7 +45,7 @@ void	eval_executable(t_data *data)
 	{
 		if (!access(data->executable, F_OK))
 		{
-			if(cmd_is_directory(data))
+			if(cmd_is_directory(data->executable))
 				free_data_and_exit(data, data->executable, IS_DIRECTORY);
 			return (eval_executable_permissions(data));
 		}
