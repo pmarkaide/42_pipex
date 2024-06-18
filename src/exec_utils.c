@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:35 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 12:52:26 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:25:19 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,7 @@ void	eval_executable(t_data *data)
 		free_data_and_exit(data, "malloc error", -1);
 	if (ft_str_empty(data->executable))
 		free_data_and_exit(data, data->executable, COMMAND_NOT_FOUND);
-	if (ft_strncmp(data->executable, "/", 1) == 0)
-		local = 1;
-	if (ft_strncmp(data->executable, "./", 2) == 0)
-		local = 1;
-	if (ft_strncmp(data->executable, "../", 3) == 0)
+	if (ft_strchr("./", data->executable[0]) != NULL)
 		local = 1;
 	if (local || data->paths == NULL)
 	{

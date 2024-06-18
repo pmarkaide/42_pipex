@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 13:15:56 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:31:58 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_array(char ***array)
 {
 	size_t	i;
 
-	if (*array == NULL || **array == NULL)
+	if (*array == NULL)
 		return ;
 	i = 0;
 	while ((*array)[i] != NULL)
@@ -43,9 +43,14 @@ void	free_data(t_data *data)
 	if (data == NULL)
 		return ;
 	close_pipes(data);
+	if (data->cmd1[0] == data->executable)
+		data->executable = NULL;
+	if (data->cmd2[0] == data->executable)
+		data->executable = NULL;
 	free_array(&data->cmd1);
 	free_array(&data->cmd2);
 	free_array(&data->paths);
+	free_string(&data->executable);
 	free_string(&data->shell);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 11:39:37 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:43:18 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	free_data(t_data *data)
 	data->pid = NULL;
 	free_array(&data->paths);
 	free_string(&data->shell);
+	free_string(&data->executable);
 }
 
 void	free_data_and_exit(t_data *data, char *file, int exit_code)

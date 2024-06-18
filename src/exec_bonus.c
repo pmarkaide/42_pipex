@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 12:49:58 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:37:29 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,7 @@ void	eval_executable(t_data *data, char *cmd)
 		free_data_and_exit(data, "malloc error", -1);
 	if (ft_str_empty(data->executable))
 		free_data_and_exit(data, data->executable, COMMAND_NOT_FOUND);
-	if (ft_strncmp(cmd, "/", 1) == 0)
-		local = 1;
-	if (ft_strncmp(cmd, "./", 2) == 0)
-		local = 1;
-	if (ft_strncmp(cmd, "../", 3) == 0)
+	if (ft_strchr("./", data->executable[0]) != NULL)
 		local = 1;
 	if (local || data->paths == NULL)
 	{
@@ -64,20 +60,19 @@ void	eval_executable(t_data *data, char *cmd)
 void	get_executable_path(t_data *data, char *cmd)
 {
 	int		i;
-	char	*executable;
 
 	i = 0;
 	while (data->paths[i])
 	{
-		executable = ft_strjoin(data->paths[i], cmd, "/");
-		if (!access(executable, F_OK))
+		data->executable = ft_strjoin(data->paths[i], cmd, "/");
+		if (!access(data->executable, F_OK))
 		{
-			data->executable = executable;
-			if (cmd_is_directory(executable))
-				free_data_and_exit(data, executable, COMMAND_NOT_FOUND);
+			if (cmd_is_directory(data->executable))
+				free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
 			return (eval_executable_permissions(data));
 		}
-		free(executable);
+		free(data->executable);
+		data->executable = NULL;
 		i++;
 	}
 	free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
