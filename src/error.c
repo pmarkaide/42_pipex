@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:25:34 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 11:00:22 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:15:56 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,6 @@ void	free_array(char ***array)
 	}
 	free(*array);
 	*array = NULL;
-}
-
-void	close_pipes(t_data *data)
-{
-	if (data->pipe_fd[0] != -1)
-		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != -1)
-		close(data->pipe_fd[1]);
 }
 
 void	free_data(t_data *data)

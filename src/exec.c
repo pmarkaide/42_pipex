@@ -6,11 +6,19 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:46 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 10:27:07 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:16:05 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+void	close_pipes(t_data *data)
+{
+	if (data->pipe_fd[0] != -1)
+		close(data->pipe_fd[0]);
+	if (data->pipe_fd[1] != -1)
+		close(data->pipe_fd[1]);
+}
 
 int	execute_shell_cmd(t_data *data, char **envp)
 {

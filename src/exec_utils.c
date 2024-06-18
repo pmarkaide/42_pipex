@@ -20,14 +20,14 @@ int	cmd_is_directory(char *cmd)
 	if (fd != -1)
 	{
 		close(fd);
-		return(1);
+		return (1);
 	}
-	return(0);
+	return (0);
 }
 
 void	eval_executable(t_data *data)
 {
-	int		local;
+	int	local;
 
 	local = 0;
 	data->executable = data->cmd[0];
@@ -45,11 +45,11 @@ void	eval_executable(t_data *data)
 	{
 		if (!access(data->executable, F_OK))
 		{
-			if(cmd_is_directory(data->executable))
+			if (cmd_is_directory(data->executable))
 				free_data_and_exit(data, data->executable, IS_DIRECTORY);
 			return (eval_executable_permissions(data));
 		}
-			free_data_and_exit(data, data->executable, EXEC_NOT_FOUND);
+		free_data_and_exit(data, data->executable, EXEC_NOT_FOUND);
 	}
 	get_executable_path(data);
 }

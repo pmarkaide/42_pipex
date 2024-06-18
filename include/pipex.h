@@ -14,11 +14,11 @@
 # define PIPEX_H
 
 # include "../lib/libft/libft.h" /* libft library */
+# include <errno.h>              /* for errno */
 # include <fcntl.h>              /* for open, O_DIRECTORY */
 # include <stdlib.h>             /* for malloc, free, exit */
 # include <sys/wait.h>           /* for waitpid, wait, */
 # include <unistd.h>             /* for file r/w, dup2, execve, fork, pipe */
-# include <errno.h>              /* for errno */
 
 # define NO_FILE 1
 # define PERMISSION_DENIED 126

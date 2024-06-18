@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 12:53:15 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:22:12 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	get_executable_path(t_data *data)
 		if (!access(executable, F_OK))
 		{
 			data->executable = executable;
-			if(cmd_is_directory(executable))
+			if (cmd_is_directory(executable))
 				free_data_and_exit(data, executable, COMMAND_NOT_FOUND);
 			return (eval_executable_permissions(data));
 		}
