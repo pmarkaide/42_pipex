@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 13:22:27 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:54:10 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	init_cmds_and_pid(t_data *data, char **argv)
 		data->cmds[i] = clean_arguments(argv[i + offset]);
 		if (data->cmds[i] == NULL)
 			free_data_and_exit(data, "malloc error", -1);
+		i++;
 	}
 	data->cmds[i] = NULL;
 }

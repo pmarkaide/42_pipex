@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:34:54 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 13:19:11 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:54:36 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ void	remove_array_quotes(char **array)
 		{
 			free(array[i]);
 			array[i] = new_str;
+		}
+		else
+		{
+			free(array[i]);
+			array[i] = NULL;
 		}
 		i++;
 	}
