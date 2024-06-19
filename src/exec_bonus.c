@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 16:37:29 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/19 12:40:54 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	get_executable_path(t_data *data, char *cmd)
 	while (data->paths[i])
 	{
 		data->executable = ft_strjoin(data->paths[i], cmd, "/");
+		if (data->executable == NULL)
+			free_data_and_exit(data, "malloc error", -1);
 		if (!access(data->executable, F_OK))
 		{
 			if (cmd_is_directory(data->executable))

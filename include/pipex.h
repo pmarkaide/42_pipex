@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 12:53:00 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:14:26 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # define NO_FILE 1
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define SEGFAULT 139
 # define IS_DIRECTORY -1
 # define EXEC_NOT_FOUND -2
 
