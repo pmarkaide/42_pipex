@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/20 15:53:53 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:59:03 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define NO_FILE 1
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
+# define FILE_PERMISSION -5
 # define IS_DIRECTORY -10
 # define EXEC_NOT_FOUND -2
 
@@ -52,7 +53,7 @@ void		get_executable_path(t_data *data);
 void		eval_executable_permissions(t_data *data);
 int			cmd_is_directory(char *cmd);
 char		**clean_arguments(char *arg);
-int			execute_child1(t_data *data, char **envp);
+void		execute_child1(t_data *data, char **envp);
 void		execute_child2(t_data *data, char **envp);
 char		*allocate_result(const char *arg);
 char		*remove_str_quotes(char *arg);

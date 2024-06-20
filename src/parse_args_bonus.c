@@ -6,11 +6,34 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:47:49 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 13:20:22 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:42:36 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
+
+void	get_executable_path(t_data *data, char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (data->paths[i])
+	{
+		data->executable = ft_strjoin(data->paths[i], cmd, "/");
+		if (data->executable == NULL)
+			free_data_and_exit(data, "malloc error", -1);
+		if (!access(data->executable, F_OK))
+		{
+			if (cmd_is_directory(data->executable))
+				free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
+			return (eval_executable_permissions(data));
+		}
+		free(data->executable);
+		data->executable = NULL;
+		i++;
+	}
+	free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
+}
 
 int	count_args(char *arg)
 {

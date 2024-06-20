@@ -6,11 +6,27 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 12:40:54 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:42:24 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
+
+int	execute_shell_cmd(t_data *data)
+{
+	char	*shell_cmd[4];
+
+	shell_cmd[0] = data->shell;
+	shell_cmd[1] = "-c";
+	shell_cmd[2] = data->executable;
+	shell_cmd[3] = NULL;
+	if (execve(data->shell, shell_cmd, data->envp) == -1)
+	{
+		ft_putstr_fd("execve failed\n", 2);
+		return (EXIT_FAILURE);
+	}
+	return (0);
+}
 
 void	eval_executable_permissions(t_data *data)
 {
@@ -57,37 +73,17 @@ void	eval_executable(t_data *data, char *cmd)
 	get_executable_path(data, cmd);
 }
 
-void	get_executable_path(t_data *data, char *cmd)
-{
-	int		i;
-
-	i = 0;
-	while (data->paths[i])
-	{
-		data->executable = ft_strjoin(data->paths[i], cmd, "/");
-		if (data->executable == NULL)
-			free_data_and_exit(data, "malloc error", -1);
-		if (!access(data->executable, F_OK))
-		{
-			if (cmd_is_directory(data->executable))
-				free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
-			return (eval_executable_permissions(data));
-		}
-		free(data->executable);
-		data->executable = NULL;
-		i++;
-	}
-	free_data_and_exit(data, cmd, COMMAND_NOT_FOUND);
-}
-
 void	execute_child_process(t_data *data, int i, int read_end)
 {
+	int	exit_code;
+
 	dup_file_descriptors(data, i, read_end);
 	eval_executable(data, data->cmds[i][0]);
 	if (execve(data->executable, data->cmds[i], data->envp) == -1)
 	{
+		exit_code = execute_shell_cmd(data);
 		free_data(data);
-		exit(EXIT_FAILURE);
+		exit(exit_code);
 	}
 	exit(0);
 }

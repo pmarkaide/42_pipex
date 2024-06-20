@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:46 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/18 13:16:05 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:59:22 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,16 @@ int	execute_cmd(t_data *data, char **envp)
 	return (0);
 }
 
-int	execute_child1(t_data *data, char **envp)
+void	execute_child1(t_data *data, char **envp)
 {
 	int	in_fd;
-	int	exit_code;
 
-	exit_code = 0;
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (errno == ENOENT)
 		free_data_and_exit(data, data->infile, NO_FILE);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->infile, PERMISSION_DENIED);
+		free_data_and_exit(data, data->infile, FILE_PERMISSION);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
 		free_data_and_exit(data, "dup2 error", -1);
 	close(in_fd);
@@ -68,8 +66,7 @@ int	execute_child1(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
 	eval_executable(data);
-	exit_code = execute_cmd(data, envp);
-	return (exit_code);
+	execute_cmd(data, envp);
 }
 
 void	execute_child2(t_data *data, char **envp)
@@ -81,7 +78,7 @@ void	execute_child2(t_data *data, char **envp)
 	if (errno == ENOENT)
 		free_data_and_exit(data, data->outfile, NO_FILE);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);
+		free_data_and_exit(data, data->outfile, FILE_PERMISSION);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
 		free_data_and_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[0]);

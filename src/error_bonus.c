@@ -87,7 +87,7 @@ void	free_data_and_exit(t_data *data, char *file, int exit_code)
 		exit_code = 127;
 	}
 	else
-		ft_putstr_fd(strerror(errno),2);
+		ft_putstr_fd(strerror(errno), 2);
 	free_data(data);
 	exit(exit_code);
 }

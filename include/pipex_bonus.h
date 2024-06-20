@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/20 15:53:48 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:43:28 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void		dup_file_descriptors(t_data *data, int cmd, int read_end);
 void		execute_child_process(t_data *data, int i, int read_end);
 void		get_executable_path(t_data *data, char *cmd);
 void		eval_executable(t_data *data, char *cmd);
+void		eval_executable_permissions(t_data *data);
 int			cmd_is_directory(char *cmd);
 char		**clean_arguments(char *arg);
 char		*allocate_result(const char *arg);
