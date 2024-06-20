@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 14:14:30 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:53:48 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 # include <stdlib.h>             /* for malloc, free, exit */
 # include <sys/wait.h>           /* for waitpid, wait, */
 # include <unistd.h>             /* for file r/w, dup2, execve, fork, pipe */
+# include <string.h>			 /* for sterror*/
 
 # define NO_FILE 1
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define IS_DIRECTORY -1
+# define IS_DIRECTORY -10
 # define EXEC_NOT_FOUND -2
 
 typedef struct s_data

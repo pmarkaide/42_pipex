@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:00:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 12:45:31 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:54:22 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	free_data_and_exit(t_data *data, char *file, int exit_code)
 		ft_putstr_fd("No such file or directory\n", 2);
 		exit_code = 127;
 	}
+	else
+		ft_putstr_fd(strerror(errno),2);
 	free_data(data);
 	exit(exit_code);
 }
