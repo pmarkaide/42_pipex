@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 12:41:42 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/06/19 17:16:25 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ void	here_doc(t_data *data)
 	while (1)
 	{
 		line = get_next_line(0);
-		if (!line)
-			free_data_and_exit(data, "here_doc file reading failed", -1);
-		if (ft_strcmp(line, delimiter_with_newline) == 0)
+		if (!line || ft_strcmp(line, delimiter_with_newline) == 0)
 		{
 			free(line);
 			free(delimiter_with_newline);
