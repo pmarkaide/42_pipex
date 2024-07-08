@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:21:26 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:11:35 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	close_open_fds(t_data *data)
 		close(data->in_fd);
 	if (data->out_fd != -1)
 		close(data->out_fd);
+	if (data->read_end != -1 && data->cmd != 0)
+		close(data->read_end);
 }
 
 void	dup2_or_exit(t_data *data, int oldfd, int newfd)
@@ -57,7 +59,7 @@ void	dup2_or_exit(t_data *data, int oldfd, int newfd)
 		command_error_exit(data, "dup2 error", -1);
 }
 
-void	dup_file_descriptors(t_data *data, int cmd, int read_end)
+void	dup_file_descriptors(t_data *data, int cmd)
 {
 	if (cmd == 0)
 	{
@@ -70,15 +72,15 @@ void	dup_file_descriptors(t_data *data, int cmd, int read_end)
 	else if (cmd == data->num_cmds - 1)
 	{
 		open_outfile(data);
-		dup2_or_exit(data, read_end, STDIN_FILENO);
-		close(read_end);
+		dup2_or_exit(data, data->read_end, STDIN_FILENO);
+		close(data->read_end);
 		dup2_or_exit(data, data->out_fd, STDOUT_FILENO);
 		close(data->out_fd);
 	}
 	else
 	{
-		dup2_or_exit(data, read_end, STDIN_FILENO);
-		close(read_end);
+		dup2_or_exit(data, data->read_end, STDIN_FILENO);
+		close(data->read_end);
 		dup2_or_exit(data, data->pipe_fd[1], STDOUT_FILENO);
 		close(data->pipe_fd[1]);
 	}

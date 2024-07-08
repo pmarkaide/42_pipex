@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:57:55 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:56:15 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:15:22 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 typedef struct s_data
 {
 	int		pipe_fd[2];
+	int		read_end;
 	char	*infile;
 	char	*outfile;
 	int		here_doc;
@@ -38,6 +39,7 @@ typedef struct s_data
 	int		in_fd;
 	int		out_fd;
 	int		num_cmds;
+	int		cmd;
 	pid_t	*pid;
 	char	***cmds;
 	char	*executable;
@@ -52,8 +54,8 @@ void		command_error_exit(t_data *data, char *file, int exit_code);
 void		init_struct(t_data *data, int argc, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 int			pipex(t_data *data);
-void		dup_file_descriptors(t_data *data, int cmd, int read_end);
-void		execute_child_process(t_data *data, int i, int read_end);
+void		dup_file_descriptors(t_data *data, int cmd);
+void		execute_child_process(t_data *data, int i);
 void		get_executable_path(t_data *data, char *cmd);
 void		eval_executable(t_data *data, char *cmd);
 void		eval_executable_permissions(t_data *data);

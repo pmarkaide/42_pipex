@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:14:59 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,10 @@ void	init_cmds_and_pid(t_data *data, char **argv)
 
 void	init_struct(t_data *data, int argc, char **argv, char **envp)
 {
+	ft_bzero(data, sizeof(t_data));
 	data->pipe_fd[0] = -1;
 	data->pipe_fd[1] = -1;
+	data->read_end = -1;
 	data->in_fd = -1;
 	data->out_fd = -1;
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
@@ -100,7 +102,6 @@ void	init_struct(t_data *data, int argc, char **argv, char **envp)
 	}
 	else
 	{
-		data->here_doc = 0;
 		data->delimiter = NULL;
 		data->infile = argv[1];
 		data->num_cmds = argc - 3;

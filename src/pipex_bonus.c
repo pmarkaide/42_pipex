@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:08:05 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	wait_processes(pid_t *pid, int cmds)
 	return (exit_code);
 }
 
-int	execute_cmds(t_data *data, int read_end)
+int	execute_cmds(t_data *data)
 {
 	int	i;
 
@@ -58,15 +58,15 @@ int	execute_cmds(t_data *data, int read_end)
 			return (error_msg("fork failed", i));
 		}
 		if (data->pid[i] == 0)
-			execute_child_process(data, i, read_end);
-		if (read_end > 0)
-			close(read_end);
-		read_end = data->pipe_fd[0];
+			execute_child_process(data, i);
+		if (data->read_end > 0)
+			close(data->read_end);
+		data->read_end = data->pipe_fd[0];
 		close(data->pipe_fd[1]);
 		i++;
 	}
-	if (read_end > 0)
-		close(read_end);
+	if (data->read_end > 0)
+		close(data->read_end);
 	return (i);
 }
 
@@ -100,13 +100,11 @@ void	here_doc(t_data *data)
 int	pipex(t_data *data)
 {
 	int	exit_code;
-	int	read_end;
 	int	num_cmds_executed;
 
-	read_end = 0;
-	num_cmds_executed = execute_cmds(data, read_end);
+	num_cmds_executed = execute_cmds(data);
 	exit_code = wait_processes(data->pid, num_cmds_executed);
-	close(read_end);
+	close(data->read_end);
 	close_open_fds(data);
 	return (exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:15:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ void	eval_executable(t_data *data, char *cmd)
 		if (!access(data->executable, F_OK))
 		{
 			if (cmd_is_directory(cmd))
+			{
+				free(data->executable);
 				command_error_exit(data, cmd, IS_DIRECTORY);
+			}
 			return (eval_executable_permissions(data));
 		}
 		command_error_exit(data, data->executable, EXEC_NOT_FOUND);
@@ -73,11 +76,12 @@ void	eval_executable(t_data *data, char *cmd)
 	get_executable_path(data, cmd);
 }
 
-void	execute_child_process(t_data *data, int i, int read_end)
+void	execute_child_process(t_data *data, int i)
 {
 	int	exit_code;
 
-	dup_file_descriptors(data, i, read_end);
+	data->cmd = i;
+	dup_file_descriptors(data, i);
 	eval_executable(data, data->cmds[i][0]);
 	if (execve(data->executable, data->cmds[i], data->envp) == -1)
 	{
