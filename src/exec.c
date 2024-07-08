@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:40:46 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/20 16:59:22 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:51:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ void	execute_child1(t_data *data, char **envp)
 	close(data->pipe_fd[0]);
 	in_fd = open(data->infile, O_RDONLY);
 	if (errno == ENOENT)
-		free_data_and_exit(data, data->infile, NO_FILE);
+		file_error_exit(data, data->infile, FILE_NOT_FOUND);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->infile, FILE_PERMISSION);
+		file_error_exit(data, data->infile, FILE_PERMISSION_DENIED);
 	if (dup2(in_fd, STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		command_error_exit(data, "dup2 error", -1);
 	close(in_fd);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		command_error_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[1]);
 	data->cmd = data->cmd1;
 	eval_executable(data);
@@ -76,14 +76,14 @@ void	execute_child2(t_data *data, char **envp)
 	close(data->pipe_fd[1]);
 	out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (errno == ENOENT)
-		free_data_and_exit(data, data->outfile, NO_FILE);
+		file_error_exit(data, data->outfile, FILE_NOT_FOUND);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->outfile, FILE_PERMISSION);
+		file_error_exit(data, data->outfile, FILE_PERMISSION_DENIED);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		command_error_exit(data, "dup2 error", -1);
 	close(data->pipe_fd[0]);
 	if (dup2(out_fd, STDOUT_FILENO) == -1)
-		free_data_and_exit(data, "dup2 error", -1);
+		command_error_exit(data, "dup2 error", -1);
 	close(out_fd);
 	data->cmd = data->cmd2;
 	eval_executable(data);

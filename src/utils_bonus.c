@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:56:27 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 11:54:10 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	init_cmds_and_pid(t_data *data, char **argv)
 	data->pid = malloc(sizeof(pid_t) * data->num_cmds);
 	data->cmds = malloc(sizeof(char **) * (data->num_cmds + 1));
 	if (data->cmds == NULL || data->pid == NULL)
-		free_data_and_exit(data, "malloc error", -1);
+		command_error_exit(data, "malloc error", -1);
 	if (data->here_doc == 1)
 		offset = 3;
 	else
@@ -79,7 +79,7 @@ void	init_cmds_and_pid(t_data *data, char **argv)
 	{
 		data->cmds[i] = clean_arguments(argv[i + offset]);
 		if (data->cmds[i] == NULL)
-			free_data_and_exit(data, "malloc error", -1);
+			command_error_exit(data, "malloc error", -1);
 		i++;
 	}
 	data->cmds[i] = NULL;

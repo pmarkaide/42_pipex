@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:27:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 17:16:25 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ void	here_doc(t_data *data)
 
 	fd = open("/tmp/here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		free_data_and_exit(data, "here_doc file opening failed", -1);
+		command_error_exit(data, "here_doc file opening failed", -1);
 	delimiter_with_newline = ft_strjoin(data->delimiter, "\n", NULL);
 	if (!delimiter_with_newline)
-		free_data_and_exit(data, "malloc error", -1);
+		command_error_exit(data, "malloc error", -1);
 	while (1)
 	{
 		line = get_next_line(0);

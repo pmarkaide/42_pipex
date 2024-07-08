@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 12:19:41 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/19 12:41:18 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:51:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ void	get_executable_path(t_data *data)
 	{
 		data->executable = ft_strjoin(data->paths[i], data->cmd[0], "/");
 		if (data->executable == NULL)
-			free_data_and_exit(data, "malloc error", -1);
+			command_error_exit(data, "malloc error", -1);
 		if (!access(data->executable, F_OK))
 		{
 			if (cmd_is_directory(data->executable))
-				free_data_and_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
+				command_error_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
 			return (eval_executable_permissions(data));
 		}
 		free(data->executable);
 		data->executable = NULL;
 		i++;
 	}
-	free_data_and_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
+	command_error_exit(data, data->cmd[0], COMMAND_NOT_FOUND);
 }
 
 char	**parse_paths(char **envp)
@@ -97,5 +97,5 @@ void	init_struct(t_data *data, char **argv, char **envp)
 	data->paths = parse_paths(envp);
 	data->shell = parse_shell(envp);
 	if (data->cmd1 == NULL || data->cmd2 == NULL)
-		free_data_and_exit(data, "malloc error", -1);
+		command_error_exit(data, "malloc error", -1);
 }

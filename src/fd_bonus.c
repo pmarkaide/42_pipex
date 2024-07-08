@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:21:26 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/17 15:43:42 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:55:28 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	open_infile(t_data *data)
 		here_doc(data);
 	data->in_fd = open(data->infile, O_RDONLY);
 	if (errno == ENOENT)
-		free_data_and_exit(data, data->infile, NO_FILE);
+		file_error_exit(data, data->infile, FILE_NOT_FOUND);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->infile, PERMISSION_DENIED);
+		file_error_exit(data, data->infile, FILE_PERMISSION_DENIED);
 	if (errno == IS_DIRECTORY)
-		free_data_and_exit(data, data->infile, IS_DIRECTORY);
+		file_error_exit(data, data->infile, IS_DIRECTORY);
 }
 
 void	open_outfile(t_data *data)
@@ -32,11 +32,11 @@ void	open_outfile(t_data *data)
 	else
 		data->out_fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (errno == ENOENT)
-		free_data_and_exit(data, data->outfile, NO_FILE);
+		file_error_exit(data, data->outfile, FILE_NOT_FOUND);
 	if (errno == EACCES)
-		free_data_and_exit(data, data->outfile, PERMISSION_DENIED);
+		file_error_exit(data, data->outfile, FILE_PERMISSION_DENIED);
 	if (errno == IS_DIRECTORY)
-		free_data_and_exit(data, data->infile, IS_DIRECTORY);
+		file_error_exit(data, data->infile, IS_DIRECTORY);
 }
 
 void	close_open_fds(t_data *data)
@@ -54,7 +54,7 @@ void	close_open_fds(t_data *data)
 void	dup2_or_exit(t_data *data, int oldfd, int newfd)
 {
 	if (dup2(oldfd, newfd) < 0)
-		free_data_and_exit(data, "dup2 error", -1);
+		command_error_exit(data, "dup2 error", -1);
 }
 
 void	dup_file_descriptors(t_data *data, int cmd, int read_end)

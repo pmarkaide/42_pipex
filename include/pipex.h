@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/06/20 16:59:03 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:51:32 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <unistd.h>             /* for file r/w, dup2, execve, fork, pipe */
 # include <string.h>			 /* for sterror*/
 
-# define NO_FILE 1
+# define FILE_NOT_FOUND 1
+# define FILE_PERMISSION_DENIED 2
 # define PERMISSION_DENIED 126
 # define COMMAND_NOT_FOUND 127
-# define FILE_PERMISSION -5
 # define IS_DIRECTORY -10
 # define EXEC_NOT_FOUND -2
 
@@ -42,7 +42,8 @@ typedef struct s_data
 }			t_data;
 
 void		free_data(t_data *data);
-void		free_data_and_exit(t_data *data, char *file, int exit_code);
+void		file_error_exit(t_data *data, char *file, int exit_code);
+void		command_error_exit(t_data *data, char *file, int exit_code);
 void		init_struct(t_data *data, char **argv, char **envp);
 char		**parse_cmd_args(char *arg);
 char		**parse_paths(char **envp);
