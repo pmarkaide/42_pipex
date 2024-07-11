@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:47:49 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 13:16:03 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:14:01 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	get_executable_path(t_data *data, char *cmd)
 	int	i;
 
 	i = 0;
+	free_string(&data->executable);
 	while (data->paths[i])
 	{
 		data->executable = ft_strjoin(data->paths[i], cmd, "/");
@@ -25,14 +26,10 @@ void	get_executable_path(t_data *data, char *cmd)
 		if (!access(data->executable, F_OK))
 		{
 			if (cmd_is_directory(data->executable))
-			{
-				free(data->executable);
 				command_error_exit(data, cmd, COMMAND_NOT_FOUND);
-			}
 			return (eval_executable_permissions(data));
 		}
-		free(data->executable);
-		data->executable = NULL;
+		free_string(&data->executable);
 		i++;
 	}
 	command_error_exit(data, cmd, COMMAND_NOT_FOUND);

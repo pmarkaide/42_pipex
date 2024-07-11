@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 16:21:10 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 12:51:32 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:21:53 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include <errno.h>              /* for errno */
 # include <fcntl.h>              /* for open, O_DIRECTORY */
 # include <stdlib.h>             /* for malloc, free, exit */
+# include <string.h>             /* for sterror*/
 # include <sys/wait.h>           /* for waitpid, wait, */
 # include <unistd.h>             /* for file r/w, dup2, execve, fork, pipe */
-# include <string.h>			 /* for sterror*/
 
 # define FILE_NOT_FOUND 1
 # define FILE_PERMISSION_DENIED 2
@@ -42,6 +42,7 @@ typedef struct s_data
 }			t_data;
 
 void		free_data(t_data *data);
+void		free_string(char **str);
 void		file_error_exit(t_data *data, char *file, int exit_code);
 void		command_error_exit(t_data *data, char *file, int exit_code);
 void		init_struct(t_data *data, char **argv, char **envp);

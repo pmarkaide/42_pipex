@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:12:08 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 18:15:32 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:14:27 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	eval_executable(t_data *data, char *cmd)
 	int	local;
 
 	local = 0;
-	data->executable = cmd;
+	data->executable = ft_strdup(cmd);
 	if (data->executable == NULL)
 		command_error_exit(data, "malloc error", -1);
 	if (ft_str_empty(data->executable))
@@ -65,10 +65,7 @@ void	eval_executable(t_data *data, char *cmd)
 		if (!access(data->executable, F_OK))
 		{
 			if (cmd_is_directory(cmd))
-			{
-				free(data->executable);
 				command_error_exit(data, cmd, IS_DIRECTORY);
-			}
 			return (eval_executable_permissions(data));
 		}
 		command_error_exit(data, data->executable, EXEC_NOT_FOUND);

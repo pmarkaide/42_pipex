@@ -61,6 +61,6 @@ void	free_data(t_data *data)
 	data->pid = NULL;
 	free_array(&data->paths);
 	free_string(&data->shell);
-	if(data->executable != NULL)
+	if (data->executable != NULL)
 		free_string(&data->executable);
 }
