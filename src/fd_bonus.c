@@ -6,7 +6,7 @@
 /*   By: pmarkaid <pmarkaid@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:21:26 by pmarkaid          #+#    #+#             */
-/*   Updated: 2024/07/08 17:11:35 by pmarkaid         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:32:19 by pmarkaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	dup_file_descriptors(t_data *data, int cmd)
 		close(data->in_fd);
 		dup2_or_exit(data, data->pipe_fd[1], STDOUT_FILENO);
 		close(data->pipe_fd[1]);
+		close(data->pipe_fd[0]);
 	}
 	else if (cmd == data->num_cmds - 1)
 	{
